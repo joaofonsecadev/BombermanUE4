@@ -3,8 +3,7 @@
 
 ABBM_GameMode::ABBM_GameMode()
 {
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/BombermanUE4/Blueprints/BP_Character.BP_Character"));
-	DefaultPawnClass = PlayerPawnBPClass.Class;
+
 }
 
 void ABBM_GameMode::PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
