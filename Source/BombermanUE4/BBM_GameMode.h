@@ -15,8 +15,27 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	int8 MaxPlayers = 2;
 	int8 CurrentPlayers = 0;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> FloorTile;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> WallTile;
+
+	UPROPERTY(EditAnywhere)
+	int Height;
+	UPROPERTY(EditAnywhere)
+	int Width;
+	UPROPERTY(EditAnywhere)
+	float CellSize = 1.0f;
+
+	char** Grid;
 
 protected:
 	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
+	void GenerateGrid();
 };

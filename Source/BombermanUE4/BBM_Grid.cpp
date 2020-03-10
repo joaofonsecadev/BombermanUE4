@@ -123,7 +123,7 @@ void ABBM_Grid::PopulatePlayerGrid()
 	float y = PlayerSpawnPosition.Y;
 	PlayerGrid[(int)x][(int)y] = 'p';
 	PlayerClass->PlayerX = (int)x;
-	PlayerClass->PlayerY = (int)y;	
+	PlayerClass->PlayerY = (int)y;
 }
 
 void ABBM_Grid::PopulateBombGrid()
