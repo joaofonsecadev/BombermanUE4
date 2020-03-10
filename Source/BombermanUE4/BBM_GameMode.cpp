@@ -9,6 +9,7 @@ ABBM_GameMode::ABBM_GameMode()
 
 void ABBM_GameMode::BeginPlay()
 {
+	Super::BeginPlay();
 	GenerateGrid();
 }
 
@@ -29,6 +30,16 @@ void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	UE_LOG(LogTemp, Warning, TEXT("Existem %d jogadores agora"), CurrentPlayers);
+}
+
+void ABBM_GameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+{
+	// If players should start as spectators, leave them in the spectator state
+	if (!bStartPlayersAsSpectators && !MustSpectate(NewPlayer) && PlayerCanRestart(NewPlayer))
+	{
+		// Otherwise spawn their pawn immediately
+		RestartPlayer(NewPlayer);
+	}
 }
 
 void ABBM_GameMode::GenerateGrid()
