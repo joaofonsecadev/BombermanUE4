@@ -13,22 +13,21 @@ public:
 	ABBM_GameMode();
 
 	UPROPERTY(EditDefaultsOnly)
-	TArray<FVector2D> SpawnLocations;
-
-	UPROPERTY(EditDefaultsOnly)
 	int8 MaxPlayers = 2;
 	int8 CurrentPlayers = 0;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="References")
 	TSubclassOf<AActor> FloorTile;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> WallTile;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly, Category = "Grid Settings")
+	TArray<FVector2D> SpawnLocations;
+	UPROPERTY(EditAnywhere, Category="Grid Settings")
 	int Height;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Grid Settings")
 	int Width;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Grid Settings")
 	float CellSize = 1.0f;
 
 	char** Grid;
