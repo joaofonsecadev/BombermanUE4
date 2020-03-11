@@ -57,14 +57,16 @@ void ABBM_GameMode::GenerateGrid()
 	{
 		for (int y = 0; y < Height; y++)
 		{
-			int Random = FMath::FRandRange(0, 2);
+			int Random = FMath::FRandRange(0, 3);
 
-			if (x == 0 || y == 0 || x == (Width - 1) || y == (Height - 1) || (x%2 == 0 && y%2 == 0))
+			if (x == 0 || y == 0 || x == (Width - 1) || y == (Height - 1) || (x % 2 == 0 && y % 2 == 0))
 				Grid[x][y] = 'w';
-			else if(Random < 1 || (x == 1 && y == (Height - 2)) || (x == 1 && y == 1) || (x == (Width - 2) && y == 1) || (x == (Width - 2) && y == (Height - 2)))
+			else if (Random < 1 || (x <= 2 && y >= (Height - 3)) || (x <= 2 && y <= 2) || (x >= (Width - 3) && y <= 2) || (x >= (Width - 3) && y >= (Height - 3)))
 				Grid[x][y] = 'f';
+			else if (Random > 1 && Random < 3)
+				Grid[x][y] = 'd';
 			else
-				Grid[x][y] = 'o';
+				Grid[x][y] = 'p';
 
 			switch (Grid[x][y])
 			{
@@ -74,8 +76,11 @@ void ABBM_GameMode::GenerateGrid()
 			case 'w':
 				ActorToSpawn = WallTile;
 				break;
-			case 'o':
+			case 'd':
 				ActorToSpawn = DestructibleTile;
+				break;
+			case 'p':
+				ActorToSpawn = PowerUpTile;
 				break;
 			}
 
