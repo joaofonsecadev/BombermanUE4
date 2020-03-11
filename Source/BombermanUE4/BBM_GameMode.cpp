@@ -51,16 +51,20 @@ void ABBM_GameMode::GenerateGrid()
 	}
 
 	TSubclassOf<AActor> ActorToSpawn;
-	FActorSpawnParameters SpawnParams;
+	FActorSpawnParameters SpawnParams;	
 
 	for (int x = 0; x < Width; x++)
 	{
 		for (int y = 0; y < Height; y++)
 		{
+			int Random = FMath::FRandRange(0, 2);
+
 			if (x == 0 || y == 0 || x == (Width - 1) || y == (Height - 1) || (x%2 == 0 && y%2 == 0))
 				Grid[x][y] = 'w';
-			else
+			else if(Random < 1 || (x == 1 && y == (Height - 2)) || (x == 1 && y == 1) || (x == (Width - 2) && y == 1) || (x == (Width - 2) && y == (Height - 2)))
 				Grid[x][y] = 'f';
+			else
+				Grid[x][y] = 'o';
 
 			switch (Grid[x][y])
 			{
@@ -69,6 +73,9 @@ void ABBM_GameMode::GenerateGrid()
 				break;
 			case 'w':
 				ActorToSpawn = WallTile;
+				break;
+			case 'o':
+				ActorToSpawn = DestructibleTile;
 				break;
 			}
 

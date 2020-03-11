@@ -22,6 +22,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> FloorTile;
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> DestructibleTile;
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> WallTile;
 
 	UPROPERTY(EditAnywhere)
