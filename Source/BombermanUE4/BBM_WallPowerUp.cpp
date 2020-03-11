@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BBM_PowerUp.h"
+#include "BBM_WallPowerUp.h"
 #include "Engine/World.h"
 
 // Sets default values
-ABBM_PowerUp::ABBM_PowerUp()
+ABBM_WallPowerUp::ABBM_WallPowerUp()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -13,7 +13,7 @@ ABBM_PowerUp::ABBM_PowerUp()
 }
 
 // Called when the game starts or when spawned
-void ABBM_PowerUp::BeginPlay()
+void ABBM_WallPowerUp::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -22,13 +22,13 @@ void ABBM_PowerUp::BeginPlay()
 }
 
 // Called every frame
-void ABBM_PowerUp::Tick(float DeltaTime)
+void ABBM_WallPowerUp::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void ABBM_PowerUp::SetPowerUpType()
+void ABBM_WallPowerUp::SetPowerUpType()
 {
 	int Random = FMath::FRandRange(0, 2);
 
@@ -38,7 +38,7 @@ void ABBM_PowerUp::SetPowerUpType()
 		Type = PowerUpType::MoreBombs;
 }
 
-void ABBM_PowerUp::SpawnPowerUp()
+void ABBM_WallPowerUp::SpawnPowerUp()
 {
 	FActorSpawnParameters SpawnParams;
 	TSubclassOf<AActor> ActorToSpawn;
