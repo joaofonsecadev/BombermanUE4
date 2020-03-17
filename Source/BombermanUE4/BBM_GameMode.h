@@ -24,21 +24,18 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Grid Settings")
 	TArray<FVector2D> SpawnLocations;
 	UPROPERTY(EditAnywhere, Category="Grid Settings")
-	int Height;
+	int Height = 11;
 	UPROPERTY(EditAnywhere, Category = "Grid Settings")
-	int Width;
+	int Width = 11;
 	UPROPERTY(EditAnywhere, Category = "Grid Settings")
 	float CellSize = 1.0f;
 
-	char** Grid;
+	class UBBM_Grid* GridManager;
 
 protected:
+
 	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer);
-
 	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
-
-	void GenerateGrid();
 };
