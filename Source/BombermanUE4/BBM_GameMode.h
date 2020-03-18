@@ -38,4 +38,7 @@ protected:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer);
 	virtual void BeginPlay() override;
+
+private:
+	int8 SpawnedNumber = 0;
 };

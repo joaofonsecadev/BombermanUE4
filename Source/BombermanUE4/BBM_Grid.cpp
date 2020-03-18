@@ -34,10 +34,32 @@ void UBBM_Grid::InitializeGrid(int _Width, int Height, float CellSize, TSubclass
 				ActorToSpawn = WallTile;
 				break;
 			}
-
-			GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+			AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+			if (x == 0 && y == 0)
+			{
+				GridReference.Init(SpawnedActor, Width * Height);
+			}
+			else
+			{
+				SetElementAtGridReferenceCoordinates(x, y, SpawnedActor);
+			}
 		}
 	}
+}
+
+AActor* UBBM_Grid::GetElementAtGridReferenceCoordinates(int x, int y)
+{
+	return GridReference[Width * x + y];
+}
+
+void UBBM_Grid::SetElementAtGridReferenceCoordinates(int x, int y, AActor* ActorPointer)
+{
+	GridReference.Insert(ActorPointer, Width * x + y);
+}
+
+FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
+{
+	return GridReference[Width * x + y]->GetActorTransform();
 }
 
 void UBBM_Grid::BeginDestroy()
