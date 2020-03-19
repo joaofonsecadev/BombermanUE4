@@ -3,6 +3,7 @@
 
 #include "BBM_Grid.h"
 #include "Engine/World.h"
+#include "Containers/Array.h"
 
 void UBBM_Grid::InitializeGrid(int _Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> WallTile)
 {
@@ -35,16 +36,10 @@ void UBBM_Grid::InitializeGrid(int _Width, int Height, float CellSize, TSubclass
 				break;
 			}
 			AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-			if (x == 0 && y == 0)
-			{
-				GridReference.Init(SpawnedActor, Width * Height);
-			}
-			else
-			{
-				SetElementAtGridReferenceCoordinates(x, y, SpawnedActor);
-			}
+			GridReference.Add(SpawnedActor);
 		}
 	}
+	UE_LOG(LogTemp, Error, TEXT("Grid gerada com sucesso com tamanho %d"), GridReference.Num());
 }
 
 AActor* UBBM_Grid::GetElementAtGridReferenceCoordinates(int x, int y)
@@ -59,6 +54,8 @@ void UBBM_Grid::SetElementAtGridReferenceCoordinates(int x, int y, AActor* Actor
 
 FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
 {
+	UE_LOG(LogTemp, Error, TEXT("Vamos la buscar transforms"));
+
 	return GridReference[Width * x + y]->GetActorTransform();
 }
 

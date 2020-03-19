@@ -5,12 +5,18 @@
 
 ABBM_GameMode::ABBM_GameMode()
 {
-
+	
 }
 
 void ABBM_GameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
+
+void ABBM_GameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
 	GridManager = NewObject<UBBM_Grid>(this);
 	GridManager->InitializeGrid(Width, Height, CellSize, FloorTile, WallTile);
 }
@@ -40,7 +46,7 @@ void ABBM_GameMode::HandleStartingNewPlayer_Implementation(APlayerController* Ne
 	if (!bStartPlayersAsSpectators && !MustSpectate(NewPlayer) && PlayerCanRestart(NewPlayer))
 	{
 		// Otherwise spawn their pawn immediately
-		RestartPlayerAtTransform(NewPlayer, GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[SpawnedNumber].X, SpawnLocations[SpawnedNumber].Y));
+		RestartPlayerAtTransform(NewPlayer, GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[SpawnedNumber].X, SpawnLocations[SpawnedNumber].Y) + FTransform(FVector(0, 0, 300)));
 		SpawnedNumber++;
 	}
 }
