@@ -18,7 +18,7 @@ void ABBM_GameMode::InitGame(const FString& MapName, const FString& Options, FSt
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
 	GridManager = NewObject<UBBM_Grid>(this);
-	GridManager->InitializeGrid(Width, Height, CellSize, FloorTile, WallTile);
+	GridManager->InitializeGrid(Width, Height, CellSize, FloorTile, WallTile, DestructibleTile, PowerUpTile);
 }
 
 void ABBM_GameMode::PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)

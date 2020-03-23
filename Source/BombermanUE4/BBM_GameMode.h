@@ -21,6 +21,10 @@ public:
 	TSubclassOf<AActor> FloorTile;
 	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> WallTile;
+	UPROPERTY(EditAnywhere, Category = "References")
+	TSubclassOf<AActor> DestructibleTile;
+	UPROPERTY(EditAnywhere, Category = "References")
+	TSubclassOf<AActor> PowerUpTile;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Grid Settings")
 	TArray<FVector2D> SpawnLocations;

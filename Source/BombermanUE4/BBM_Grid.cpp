@@ -5,7 +5,7 @@
 #include "Engine/World.h"
 #include "Containers/Array.h"
 
-void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> WallTile)
+void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> DestructibleTile, TSubclassOf<AActor> PowerUpTile)
 {
 	_Width = Width;
 	Grid = new char* [_Width];
@@ -21,11 +21,17 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	{
 		for (int y = 0; y < Height; y++)
 		{
+			int32 Random = FMath::FRandRange(0, 3);
+
 			if (x == 0 || y == 0 || x == (_Width - 1) || y == (Height - 1) || (x % 2 == 0 && y % 2 == 0))
 				Grid[x][y] = 'w';
+			else if (Random > 0 && Random < 1)
+				Grid[x][y] = 'd';
+			else if (Random > 1 && Random < 2)
+				Grid[x][y] = 'p';
 			else
 				Grid[x][y] = 'f';
-
+				
 			switch (Grid[x][y])
 			{
 			case 'f':
@@ -33,6 +39,12 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 				break;
 			case 'w':
 				ActorToSpawn = WallTile;
+				break;
+			case 'd':
+				ActorToSpawn = DestructibleTile;
+				break;
+			case 'p':
+				ActorToSpawn = PowerUpTile;
 				break;
 			}
 			if (GetWorld() != nullptr)
