@@ -21,7 +21,7 @@ public:
 	FTransform GetTransformFromGridReferenceCoordiantes(int x, int y);
 
 protected:
-	int Width;
+	int32 _Width;
 	char** Grid;
 	TArray<AActor*> GridReference;
 
