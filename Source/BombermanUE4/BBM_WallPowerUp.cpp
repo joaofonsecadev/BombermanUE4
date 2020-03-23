@@ -17,8 +17,7 @@ void ABBM_WallPowerUp::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetPowerUpType();
-	SpawnPowerUp();
+	SetPowerUpType();	
 }
 
 // Called every frame
@@ -35,7 +34,7 @@ void ABBM_WallPowerUp::SetPowerUpType()
 	if (Random < 1)
 		Type = PowerUpType::KickBombs;
 	else
-		Type = PowerUpType::MoreBombs;
+		Type = PowerUpType::MoreBombs;	
 }
 
 void ABBM_WallPowerUp::SpawnPowerUp()
@@ -46,11 +45,11 @@ void ABBM_WallPowerUp::SpawnPowerUp()
 	switch (Type) 
 	{
 		case PowerUpType::KickBombs:
-		ActorToSpawn = KickBombsPowerUp;
-		break;
+			ActorToSpawn = KickBombsPowerUp;
+			break;
 		case PowerUpType::MoreBombs:
-		ActorToSpawn = MoreBombsPowerUp;
-		break;
+			ActorToSpawn = MoreBombsPowerUp;
+			break;
 	}
 
 	GetWorld()->SpawnActor<AActor>(ActorToSpawn, GetActorLocation(), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);	
