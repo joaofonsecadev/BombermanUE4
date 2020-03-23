@@ -3,70 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "UObject/NoExportTypes.h"
 #include "BBM_Grid.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class BOMBERMANUE4_API ABBM_Grid : public AActor
+class BOMBERMANUE4_API UBBM_Grid : public UObject
 {
-	GENERATED_BODY()	
-
+	GENERATED_BODY()
+	
 public:
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> FloorTile;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> WallTile;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> PlayerCharacter;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> Explosion;
-	
-	UPROPERTY(EditAnywhere)
-	FVector2D PlayerSpawnPosition;
-
-	UPROPERTY(EditAnywhere)
-	int Width = 10;
-	UPROPERTY(EditAnywhere)
-	int Height = 10;
-	UPROPERTY(EditAnywhere)
-	float CellSize = 1.0f;
-
-	UPROPERTY(EditAnywhere)
-	float LerpSpeed = 10.0f;
-
-	char** LevelGrid;
-	char** PlayerGrid;
-	char** BombGrid;
-
-	AActor* Player = nullptr;
-	FVector DesiredLocation;
-
-	bool bHasMoved = false;	
-	
-	UFUNCTION(BlueprintCallable)
-	void MovePlayer(AActor* CallingPlayer, float x, float y);
-	UFUNCTION(BlueprintCallable)
-	void PlaceBomb(AActor* Bomb);
-	UFUNCTION(BlueprintCallable)
-	void CheckBombCollisions(AActor* Bomb, int ExplosionRange);
-
-	// Sets default values for this actor's properties
-	ABBM_Grid();
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-private:
-	void InitLevelGrid();
-	void InitPlayerGrid();
-	void InitBombGrid();
-	void GenerateLevelGrid();
-	void PopulateLevelGrid();
-	void PopulatePlayerGrid();
-	void PopulateBombGrid();
+	void InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> WallTile);
+	AActor* GetElementAtGridReferenceCoordinates(int x, int y);
+	void SetElementAtGridReferenceCoordinates(int x, int y, AActor* ActorPointer);
+	FTransform GetTransformFromGridReferenceCoordiantes(int x, int y);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	int32 _Width;
+	char** Grid;
+	TArray<AActor*> GridReference;
 
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+	virtual void BeginDestroy() override;
 };
