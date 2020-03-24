@@ -29,7 +29,7 @@ void ABBM_WallPowerUp::Tick(float DeltaTime)
 
 void ABBM_WallPowerUp::SetPowerUpType()
 {
-	int Random = FMath::FRandRange(0, 2);
+	int32 Random = FMath::FRandRange(0, 2);
 
 	if (Random < 1)
 		Type = PowerUpType::KickBombs;

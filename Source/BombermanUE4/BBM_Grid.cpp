@@ -21,7 +21,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	{
 		for (int y = 0; y < Height; y++)
 		{
-			int Random = FMath::FRandRange(0, 3);
+			int32 Random = FMath::FRandRange(0, 3);
 
 			if (x == 0 || y == 0 || x == (_Width - 1) || y == (Height - 1) || (x % 2 == 0 && y % 2 == 0))
 				Grid[x][y] = 'w';
@@ -34,23 +34,29 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 				
 			switch (Grid[x][y])
 			{
-			case 'f':
-				ActorToSpawn = FloorTile;
-				break;
-			case 'w':
-				ActorToSpawn = WallTile;
-				break;
-			case 'd':
-				ActorToSpawn = DestructibleTile;
-				break;
-			case 'p':
-				ActorToSpawn = PowerUpTile;
-				break;
+				case 'f':
+					ActorToSpawn = FloorTile;
+					break;
+				case 'w':
+					ActorToSpawn = WallTile;
+					break;
+				case 'd':
+					ActorToSpawn = DestructibleTile;
+					break;
+				case 'p':
+					ActorToSpawn = PowerUpTile;
+					break;
 			}
 
 			if (GetWorld() != nullptr)
 			{
-				AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+				AActor* SpawnedActor;
+
+				if (ActorToSpawn == FloorTile) 				
+					SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), -100.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);								
+				else 				
+					SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);					
+				
 				GridReference.Add(SpawnedActor);
 			}
 			
