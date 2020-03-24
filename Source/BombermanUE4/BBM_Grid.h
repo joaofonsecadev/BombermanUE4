@@ -22,6 +22,7 @@ public:
 
 protected:
 	int32 _Width;
+	int32 _Height;
 	char** Grid;
 	TArray<AActor*> GridReference;
 

@@ -46,7 +46,7 @@ void ABBM_GameMode::HandleStartingNewPlayer_Implementation(APlayerController* Ne
 	if (!bStartPlayersAsSpectators && !MustSpectate(NewPlayer) && PlayerCanRestart(NewPlayer))
 	{
 		// Otherwise spawn their pawn immediately
-		RestartPlayerAtTransform(NewPlayer, GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[SpawnedNumber].X, SpawnLocations[SpawnedNumber].Y) + FTransform(FVector(0, 0, 300)));
+		RestartPlayerAtTransform(NewPlayer, GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[SpawnedNumber].X, SpawnLocations[SpawnedNumber].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight)));
 		SpawnedNumber++;
 	}
 }
