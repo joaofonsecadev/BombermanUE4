@@ -54,6 +54,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 			if (GetWorld() != nullptr)
 			{
 				AActor* SpawnedActor;
+				//Spawning floor tiles and adding each one to GridReference
 				if (x > 0 && x < _Width - 1 && y > 0 && y < _Height - 1)
 				{
 					SpawnedActor = GetWorld()->SpawnActor<AActor>(FloorTile, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), -100.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
@@ -63,28 +64,10 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 			}
 		}
 	}
-	UE_LOG(LogTemp, Error, TEXT("Grid gerada com sucesso com tamanho %d"), GridReference.Num());
-}
-
-AActor* UBBM_Grid::GetElementAtGridReferenceCoordinates(int x, int y)
-{
-	return GridReference[_Width * x + y];
-}
-
-void UBBM_Grid::SetElementAtGridReferenceCoordinates(int x, int y, AActor* ActorPointer)
-{
-	GridReference.Insert(ActorPointer, _Width * x + y);
 }
 
 FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
 {
-	/*UE_LOG(LogTemp, Error, TEXT("Vamos la buscar transforms"));
-	if (GridReference.Num() == 0)
-	{
-		UE_LOG(LogTemp, Error, TEXT("GridReference vazia!!!!!!!!!!"));
-		return FTransform(FVector(0, 0, 200));
-	}*/
-
 	return GridReference[(_Width - 2) * FMath::Clamp(x, 0, _Width - 3) + FMath::Clamp(y, 0, _Height - 3)]->GetActorTransform();
 }
 
