@@ -21,16 +21,16 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	{
 		for (int y = 0; y < Height; y++)
 		{
-			int32 Random = FMath::FRandRange(0, 3);
+			int Random = FMath::FRandRange(0, 3);
 
 			if (x == 0 || y == 0 || x == (_Width - 1) || y == (Height - 1) || (x % 2 == 0 && y % 2 == 0))
 				Grid[x][y] = 'w';
-			else if (Random > 0 && Random < 1)
-				Grid[x][y] = 'd';
-			else if (Random > 1 && Random < 2)
-				Grid[x][y] = 'p';
-			else
+			else if (Random == 0 || (x <= 2 && y >= (Height - 3)) || (x <= 2 && y <= 2) || (x >= (_Width - 3) && y <= 2) || (x >= (_Width - 3) && y >= (Height - 3)))
 				Grid[x][y] = 'f';
+			else if (Random == 1)
+				Grid[x][y] = 'd';
+			else if (Random == 2)
+				Grid[x][y] = 'p';
 				
 			switch (Grid[x][y])
 			{
@@ -47,6 +47,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 				ActorToSpawn = PowerUpTile;
 				break;
 			}
+
 			if (GetWorld() != nullptr)
 			{
 				AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
