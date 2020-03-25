@@ -20,6 +20,8 @@ public:
 	UPROPERTY(EditAnywhere, Category="References")
 	TSubclassOf<AActor> FloorTile;
 	UPROPERTY(EditAnywhere, Category = "References")
+	TSubclassOf<AActor> FloorPlane;
+	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> WallTile;
 	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> DestructibleTile;
