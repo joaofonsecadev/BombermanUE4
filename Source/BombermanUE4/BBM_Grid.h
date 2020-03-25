@@ -15,7 +15,7 @@ class BOMBERMANUE4_API UBBM_Grid : public UObject
 	GENERATED_BODY()
 	
 public:
-	void InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> DestructibleTile, TSubclassOf<AActor> PowerUpTile);
+	void InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> DestructibleTile, TSubclassOf<AActor> PowerUpTile);
 	AActor* GetElementAtGridReferenceCoordinates(int x, int y);
 	void SetElementAtGridReferenceCoordinates(int x, int y, AActor* ActorPointer);
 	FTransform GetTransformFromGridReferenceCoordiantes(int x, int y);

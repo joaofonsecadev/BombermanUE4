@@ -5,7 +5,7 @@
 #include "Engine/World.h"
 #include "Containers/Array.h"
 
-void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> DestructibleTile, TSubclassOf<AActor> PowerUpTile)
+void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> DestructibleTile, TSubclassOf<AActor> PowerUpTile)
 {
 	_Width = Width;
 	Grid = new char* [_Width];
@@ -62,6 +62,12 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 			
 		}
 	}
+	
+	FTransform OffsetedTransform = GetTransformFromGridReferenceCoordiantes((int)((_Width / 2)), (int)((Height / 2)));
+	FVector OffsetedPosition = OffsetedTransform.GetLocation();
+	FVector DesiredPosition = FVector(OffsetedPosition.X, OffsetedPosition.Y, OffsetedPosition.Z + 100.0f);
+	GetWorld()->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+
 	UE_LOG(LogTemp, Error, TEXT("Grid gerada com sucesso com tamanho %d"), GridReference.Num());
 }
 
