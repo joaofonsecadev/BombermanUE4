@@ -61,16 +61,18 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 					SpawnedActor = GetWorld()->SpawnActor<AActor>(FloorTile, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), -100.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 					GridReference.Add(SpawnedActor);
 				}
-				if (ActorToSpawn != FloorTile) SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);										
+				if (ActorToSpawn != FloorTile) SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 			}
 		}
 	}
 	
-	FTransform OffsetedTransform = GetTransformFromGridReferenceCoordiantes((int)((_Width / 2)), (int)((_Height / 2)));
+	int32 IndexToSearchFor = (GridReference.Num() / 2);
+	FTransform OffsetedTransform = GridReference[IndexToSearchFor]->GetActorTransform();
 	FVector OffsetedPosition = OffsetedTransform.GetLocation();
 	FVector DesiredPosition = FVector(OffsetedPosition.X, OffsetedPosition.Y, OffsetedPosition.Z + 100.0f);
 	AActor* SpawnedFloor = GetWorld()->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
+	SpawnedFloor->SetActorLocation(DesiredPosition);
 
 	UE_LOG(LogTemp, Error, TEXT("Grid gerada com sucesso com tamanho %d"), GridReference.Num());
 }
