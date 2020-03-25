@@ -76,3 +76,4 @@ DerivedDataCache/*
 .vscode/
 BombermanUE4.code-workspace
 enc_temp_folder/
+Config/DefaultEditorPerProjectUserSettings.ini

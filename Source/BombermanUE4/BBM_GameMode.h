@@ -36,6 +36,8 @@ public:
 	int32 Width = 11;
 	UPROPERTY(EditAnywhere, Category = "Grid Settings")
 	float CellSize = 1.0f;
+	UPROPERTY(EditAnywhere, Category = "Grid Settings")
+	float PlayerSpawnHeight = 300.0f;
 
 	UPROPERTY()
 	UBBM_Grid* GridManager;
