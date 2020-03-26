@@ -20,7 +20,6 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	TSubclassOf<AActor> ActorToSpawn;
 	FActorSpawnParameters SpawnParams;
 
-
 	for (int x = 0; x < _Width; x++)
 	{
 		for (int y = 0; y < _Height; y++)
