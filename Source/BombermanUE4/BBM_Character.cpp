@@ -47,7 +47,6 @@ void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ABBM_Character::ThrowBomb);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABBM_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABBM_Character::MoveRight);
