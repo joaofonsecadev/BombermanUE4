@@ -65,7 +65,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 		}
 	}
 	
-	int32 IndexToSearchFor = (GridReference.Num() / 2);
+	int32 IndexToSearchFor = (GridReference.Num() / 2); 
 	FTransform OffsetedTransform = GridReference[IndexToSearchFor]->GetActorTransform();
 	FVector OffsetedPosition = OffsetedTransform.GetLocation();
 	FVector DesiredPosition = FVector(OffsetedPosition.X, OffsetedPosition.Y, OffsetedPosition.Z + 100.0f);
