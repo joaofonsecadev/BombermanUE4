@@ -45,9 +45,11 @@ ABBM_Character::ABBM_Character()
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	//PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ABBM_Character::ThrowBomb);
+
+	PlayerInputComponent->BindAction("PlaceBomb", IE_Released, this, &ABBM_Character::PlaceBomb);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABBM_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABBM_Character::MoveRight);
@@ -134,5 +136,28 @@ void ABBM_Character::MoveRight(float Value)
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
+	}
+}
+
+void ABBM_Character::PlaceBomb()
+{
+	FHitResult* HitResult = new FHitResult();
+	FVector StartTrace = GetCapsuleComponent()->RelativeLocation;
+	FVector DownVector = GetActorUpVector() * -1;
+	FVector EndTrace = (DownVector * 5000.0f) + StartTrace;
+	FCollisionQueryParams* TraceParams = new FCollisionQueryParams();
+
+	FActorSpawnParameters SpawnParams;
+
+	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams)) 
+	{
+		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), true);		
+
+		if (HitResult->Actor->ActorHasTag("FloorTile"))
+		{
+			FVector TileLocation = HitResult->Actor->GetActorLocation();
+			FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
+			GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		}
 	}
 }
