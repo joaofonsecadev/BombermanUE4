@@ -151,8 +151,6 @@ void ABBM_Character::PlaceBomb()
 
 	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams)) 
 	{
-		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), true);		
-
 		if (HitResult->Actor->ActorHasTag("FloorTile"))
 		{
 			FVector TileLocation = HitResult->Actor->GetActorLocation();
