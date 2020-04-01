@@ -157,6 +157,13 @@ void ABBM_Character::PlaceBomb()
 			FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
 			GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 			Ammo--;
+			FTimerHandle handle;
+			GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Character::IncreaseAmmo, 3.0f, false);
 		}
 	}
+}
+
+void ABBM_Character::IncreaseAmmo()
+{
+	Ammo++;
 }

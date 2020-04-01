@@ -40,12 +40,14 @@ protected:
 
 	void TurnAtRate(float Rate);
 
-	void LookUpAtRate(float Rate);
+	void LookUpAtRate(float Rate);	
 
 	/*UFUNCTION(Server, Reliable)
 	void ThrowBomb();*/
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void IncreaseAmmo();
 
 	/*UFUNCTION()
 	void OnRep_CurrentHealth();*/
