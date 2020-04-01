@@ -42,6 +42,11 @@ ABBM_Character::ABBM_Character()
 	CurrentHealth = MaxHealth;*/
 }
 
+void ABBM_Character::DestroySelf()
+{
+	return;
+}
+
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
