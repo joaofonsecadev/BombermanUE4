@@ -26,6 +26,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> Bomb;
 
+	int32 Ammo = 1;
+
 	//float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:

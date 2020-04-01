@@ -151,11 +151,12 @@ void ABBM_Character::PlaceBomb()
 
 	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams)) 
 	{
-		if (HitResult->Actor->ActorHasTag("FloorTile"))
+		if (HitResult->Actor->ActorHasTag("FloorTile") && Ammo > 0)
 		{
 			FVector TileLocation = HitResult->Actor->GetActorLocation();
 			FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
 			GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+			Ammo--;
 		}
 	}
 }
