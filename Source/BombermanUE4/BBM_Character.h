@@ -2,10 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "BBM_DestructibleObject.h"
 #include "BBM_Character.generated.h"
 
 UCLASS(config = Game)
-class ABBM_Character : public ACharacter
+class ABBM_Character : public ACharacter, public IBBM_DestructibleObject
 {
 	GENERATED_BODY()
 
