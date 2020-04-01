@@ -25,6 +25,12 @@ public:
 	float BaseLookUpRate;
 
 	virtual void DestroySelf() override;
+
+	UPROPERTY(EditAnywhere, Category = "References")
+	TSubclassOf<AActor> Bomb;
+
+	int32 Ammo = 1;
+
 	//float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
@@ -33,14 +39,18 @@ protected:
 
 	void MoveRight(float Value);
 
+	void PlaceBomb();
+
 	void TurnAtRate(float Rate);
 
-	void LookUpAtRate(float Rate);
+	void LookUpAtRate(float Rate);	
 
 	/*UFUNCTION(Server, Reliable)
 	void ThrowBomb();*/
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void IncreaseAmmo();
 
 	/*UFUNCTION()
 	void OnRep_CurrentHealth();*/
