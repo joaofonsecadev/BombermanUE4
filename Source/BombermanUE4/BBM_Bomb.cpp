@@ -4,6 +4,7 @@
 #include "BBM_Bomb.h"
 #include "Engine/World.h"
 #include "Engine.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ABBM_Bomb::ABBM_Bomb()
@@ -32,5 +33,6 @@ void ABBM_Bomb::Tick(float DeltaTime)
 void ABBM_Bomb::Explode()
 {
 	UE_LOG(LogTemp, Error, TEXT("Bomb exploding"));
+	DrawDebugSphere(GetWorld(), GetActorLocation(), ExplosionRadius, 50.0f, FColor::Cyan, true, -1.0f, 0, 2.0f);
 	Destroy();
 }

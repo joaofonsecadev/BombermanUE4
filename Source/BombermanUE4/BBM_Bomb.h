@@ -16,7 +16,7 @@ public:
 	ABBM_Bomb();
 
 	UPROPERTY(EditAnywhere)
-	int ExplosionRange;
+	int ExplosionRadius;
 
 private:
 
