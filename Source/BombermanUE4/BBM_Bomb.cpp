@@ -32,7 +32,6 @@ void ABBM_Bomb::Tick(float DeltaTime)
 
 void ABBM_Bomb::Explode()
 {
-	UE_LOG(LogTemp, Error, TEXT("Bomb exploding"));
-	DrawDebugSphere(GetWorld(), GetActorLocation(), ExplosionRadius, 50.0f, FColor::Cyan, true, -1.0f, 0, 2.0f);
+	DrawDebugSphere(GetWorld(), GetActorLocation(), ExplosionRadius, 25.0f, FColor::Cyan, false, 1.0f, 0, 2.0f);
 	Destroy();
 }
