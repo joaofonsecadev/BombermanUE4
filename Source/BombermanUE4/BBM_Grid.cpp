@@ -20,6 +20,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	TSubclassOf<AActor> ActorToSpawn;
 	FActorSpawnParameters SpawnParams;
 
+	UWorld* World = GetWorld();
 	for (int x = 0; x < _Width; x++)
 	{
 		for (int y = 0; y < _Height; y++)
@@ -46,16 +47,16 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 				Grid[x][y] = 'p';
 				ActorToSpawn = PowerUpTile;
 			}
-			if (GetWorld() != nullptr)
+			if (World != nullptr)
 			{
 				AActor* SpawnedActor;
 				//Spawning floor tiles and adding each one to GridReference
 				if (x > 0 && x < _Width - 1 && y > 0 && y < _Height - 1)
 				{
-					SpawnedActor = GetWorld()->SpawnActor<AActor>(FloorTile, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), -100.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+					SpawnedActor = World->SpawnActor<AActor>(FloorTile, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), -100.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 					FloorActorCoordinates.Add(SpawnedActor);
 				}
-				if (ActorToSpawn != FloorTile) SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+				if (ActorToSpawn != FloorTile) SpawnedActor = World->SpawnActor<AActor>(ActorToSpawn, FVector(0.0f + (y * CellSize * -100.0f), 0.0f + (x * CellSize * 100.0f), 0.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 			}
 		}
 	}
@@ -64,7 +65,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	FTransform OffsetedTransform = FloorActorCoordinates[IndexToSearchFor]->GetActorTransform();
 	FVector OffsetedPosition = OffsetedTransform.GetLocation();
 	FVector DesiredPosition = FVector(OffsetedPosition.X, OffsetedPosition.Y, OffsetedPosition.Z + 100.0f);
-	AActor* SpawnedFloor = GetWorld()->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
 	SpawnedFloor->SetActorLocation(DesiredPosition);
 
