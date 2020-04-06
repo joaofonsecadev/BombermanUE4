@@ -27,30 +27,25 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 			int32 Random = FMath::FRandRange(0, 3);
 
 			if (x == 0 || y == 0 || x == (_Width - 1) || y == (_Height - 1) || (x % 2 == 0 && y % 2 == 0))
-				Grid[x][y] = 'w';
-			else if (Random == 0 || (x <= 2 && y >= (_Height - 3)) || (x <= 2 && y <= 2) || (x >= (_Width - 3) && y <= 2) || (x >= (_Width - 3) && y >= (_Height - 3)))
-				Grid[x][y] = 'f';
-			else if (Random == 1)
-				Grid[x][y] = 'd';
-			else if (Random == 2)
-				Grid[x][y] = 'p';
-				
-			switch (Grid[x][y])
 			{
-				case 'f':
-					ActorToSpawn = FloorTile;
-					break;
-				case 'w':
-					ActorToSpawn = WallTile;
-					break;
-				case 'd':
-					ActorToSpawn = DestructibleTile;
-					break;
-				case 'p':
-					ActorToSpawn = PowerUpTile;
-					break;
+				Grid[x][y] = 'w';
+				ActorToSpawn = WallTile;
 			}
-
+			else if (Random == 0 || (x <= 2 && y >= (_Height - 3)) || (x <= 2 && y <= 2) || (x >= (_Width - 3) && y <= 2) || (x >= (_Width - 3) && y >= (_Height - 3)))
+			{
+				Grid[x][y] = 'f';
+				ActorToSpawn = FloorTile;
+			}
+			else if (Random == 1)
+			{
+				Grid[x][y] = 'd';
+				ActorToSpawn = DestructibleTile;
+			}
+			else if (Random == 2)
+			{
+				Grid[x][y] = 'p';
+				ActorToSpawn = PowerUpTile;
+			}
 			if (GetWorld() != nullptr)
 			{
 				AActor* SpawnedActor;
