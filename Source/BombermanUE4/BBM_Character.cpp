@@ -146,26 +146,29 @@ void ABBM_Character::MoveRight(float Value)
 
 void ABBM_Character::PlaceBomb_Implementation()
 {
-	FHitResult* HitResult = new FHitResult();
-	FVector StartTrace = GetCapsuleComponent()->RelativeLocation;
-	FVector DownVector = GetActorUpVector() * -1;
-	FVector EndTrace = (DownVector * 5000.0f) + StartTrace;
-	FCollisionQueryParams* TraceParams = new FCollisionQueryParams();
-
-	FActorSpawnParameters SpawnParams;
-
-	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
+	if (HasAuthority()) 
 	{
-		if (HitResult->Actor->ActorHasTag("FloorTile") && Ammo > 0)
+		FHitResult* HitResult = new FHitResult();
+		FVector StartTrace = GetCapsuleComponent()->RelativeLocation;
+		FVector DownVector = GetActorUpVector() * -1;
+		FVector EndTrace = (DownVector * 5000.0f) + StartTrace;
+		FCollisionQueryParams* TraceParams = new FCollisionQueryParams();
+
+		FActorSpawnParameters SpawnParams;
+
+		if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
 		{
-			FVector TileLocation = HitResult->Actor->GetActorLocation();
-			FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
-			GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-			Ammo--;
-			FTimerHandle handle;
-			GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Character::IncreaseAmmo, 3.0f, false);
+			if (HitResult->Actor->ActorHasTag("FloorTile") && Ammo > 0)
+			{
+				FVector TileLocation = HitResult->Actor->GetActorLocation();
+				FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
+				GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+				Ammo--;
+				FTimerHandle handle;
+				GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Character::IncreaseAmmo, 3.0f, false);
+			}
 		}
-	}
+	}	
 }
 
 void ABBM_Character::IncreaseAmmo()
