@@ -39,6 +39,7 @@ protected:
 
 	void MoveRight(float Value);
 
+	UFUNCTION(Server, Reliable)
 	void PlaceBomb();
 
 	void TurnAtRate(float Rate);

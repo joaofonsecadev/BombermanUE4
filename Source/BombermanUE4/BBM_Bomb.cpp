@@ -30,10 +30,8 @@ void ABBM_Bomb::Tick(float DeltaTime)
 
 }
 
-void ABBM_Bomb::Explode()
+void ABBM_Bomb::Explode_Implementation()
 {
-	//DrawDebugSphere(GetWorld(), GetActorLocation(), ExplosionRadius, 25.0f, FColor::Cyan, false, 1.0f, 0, 2.0f);
-	
 	TArray<FHitResult> OutHits;
 	
 	FVector ActorLocation = GetActorLocation();

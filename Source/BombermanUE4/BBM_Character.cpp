@@ -144,7 +144,7 @@ void ABBM_Character::MoveRight(float Value)
 	}
 }
 
-void ABBM_Character::PlaceBomb()
+void ABBM_Character::PlaceBomb_Implementation()
 {
 	FHitResult* HitResult = new FHitResult();
 	FVector StartTrace = GetCapsuleComponent()->RelativeLocation;
@@ -154,7 +154,7 @@ void ABBM_Character::PlaceBomb()
 
 	FActorSpawnParameters SpawnParams;
 
-	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams)) 
+	if (GetWorld()->LineTraceSingleByChannel(*HitResult, StartTrace, EndTrace, ECC_Visibility, *TraceParams))
 	{
 		if (HitResult->Actor->ActorHasTag("FloorTile") && Ammo > 0)
 		{

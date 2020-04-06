@@ -23,6 +23,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float TimeToExplode;
 
+	UFUNCTION(Server, Reliable)
 	void Explode();
 
 protected:
