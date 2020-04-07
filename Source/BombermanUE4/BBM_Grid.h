@@ -9,6 +9,16 @@
 /**
  * 
  */
+
+UENUM()
+enum ActorType
+{
+	Wall,
+	Floor,
+	Destructible,
+	Powerup
+};
+
 UCLASS()
 class BOMBERMANUE4_API UBBM_Grid : public UObject
 {
@@ -21,8 +31,9 @@ public:
 protected:
 	int32 _Width;
 	int32 _Height;
-	char** Grid;
-	TArray<AActor*> GridReference;
+	int8** Grid;
+	TArray<AActor*> FloorActorCoordinates;
+	TEnumAsByte<ActorType> ActorSpawnType;
 
 	virtual void BeginDestroy() override;
 };
