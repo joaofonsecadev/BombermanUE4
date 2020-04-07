@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BBM_DestructibleObject.h"
 #include "BBM_WallPowerUp.generated.h"
 
 UENUM()
@@ -14,7 +15,7 @@ enum class PowerUpType : uint8
 };
 
 UCLASS()
-class BOMBERMANUE4_API ABBM_WallPowerUp : public AActor
+class BOMBERMANUE4_API ABBM_WallPowerUp : public AActor, public IBBM_DestructibleObject
 {
 	GENERATED_BODY()
 	
@@ -22,6 +23,8 @@ public:
 	// Sets default values for this actor's properties
 	ABBM_WallPowerUp();
 	
+	virtual void DestroySelf() override;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> KickBombsPowerUp;
 	UPROPERTY(EditAnywhere)

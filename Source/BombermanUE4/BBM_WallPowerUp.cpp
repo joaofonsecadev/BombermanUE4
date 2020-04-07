@@ -27,6 +27,13 @@ void ABBM_WallPowerUp::Tick(float DeltaTime)
 
 }
 
+void ABBM_WallPowerUp::DestroySelf()
+{
+	SpawnPowerUp();
+	Destroy();
+	return;
+}
+
 void ABBM_WallPowerUp::SetPowerUpType()
 {
 	int32 Random = FMath::FRandRange(0, 2);

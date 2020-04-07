@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "Engine.h"
 #include "DrawDebugHelpers.h"
+#include "BBM_DestructibleObject.h"
 
 // Sets default values
 ABBM_Bomb::ABBM_Bomb()
@@ -48,7 +49,12 @@ void ABBM_Bomb::Explode_Implementation()
 		{
 			for (auto& Hit : OutHits)
 			{
-				UE_LOG(LogTemp, Error, TEXT("It hit: %s"), *Hit.Actor->GetName());
+				//UE_LOG(LogTemp, Error, TEXT("It hit: %s"), *Hit.Actor->GetName());
+				if (Hit.Actor->ActorHasTag("DestructibleObject")) 
+				{
+					/*UBBM_DestructibleObject* DestructibleObject = Cast<UBBM_DestructibleObject>(Hit.Actor);
+					DestructibleObject;*/
+				}
 			}
 		}
 
