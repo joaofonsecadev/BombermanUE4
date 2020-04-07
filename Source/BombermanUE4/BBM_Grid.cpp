@@ -62,9 +62,9 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	}
 	
 	int32 IndexToSearchFor = (FloorActorCoordinates.Num() / 2); 
-	FTransform OffsetedTransform = FloorActorCoordinates[IndexToSearchFor]->GetActorTransform();
-	FVector OffsetedPosition = OffsetedTransform.GetLocation();
-	FVector DesiredPosition = FVector(OffsetedPosition.X, OffsetedPosition.Y, OffsetedPosition.Z + 100.0f);
+	FTransform OffsettedTransform = FloorActorCoordinates[IndexToSearchFor]->GetActorTransform();
+	FVector OffsettedPosition = OffsettedTransform.GetLocation();
+	FVector DesiredPosition = FVector(OffsettedPosition.X, OffsettedPosition.Y, OffsettedPosition.Z + 100.0f);
 	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
 	SpawnedFloor->SetActorLocation(DesiredPosition);
