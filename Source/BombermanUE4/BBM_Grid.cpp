@@ -11,10 +11,10 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 {
 	_Width = Width;
 	_Height = Height;
-	Grid = new char* [_Width];
+	Grid = new int8* [_Width];
 	for (int i = 0; i < _Width; ++i)
 	{
-		Grid[i] = new char[_Height];
+		Grid[i] = new int8[_Height];
 	}
 
 	TSubclassOf<AActor> ActorToSpawn;
@@ -29,22 +29,22 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 
 			if (x == 0 || y == 0 || x == (_Width - 1) || y == (_Height - 1) || (x % 2 == 0 && y % 2 == 0))
 			{
-				Grid[x][y] = 'w';
+				Grid[x][y] = Wall;
 				ActorToSpawn = WallTile;
 			}
 			else if (Random == 0 || (x <= 2 && y >= (_Height - 3)) || (x <= 2 && y <= 2) || (x >= (_Width - 3) && y <= 2) || (x >= (_Width - 3) && y >= (_Height - 3)))
 			{
-				Grid[x][y] = 'f';
+				Grid[x][y] = Floor;
 				ActorToSpawn = FloorTile;
 			}
 			else if (Random == 1)
 			{
-				Grid[x][y] = 'd';
+				Grid[x][y] = Destructible;
 				ActorToSpawn = DestructibleTile;
 			}
 			else if (Random == 2)
 			{
-				Grid[x][y] = 'p';
+				Grid[x][y] = Powerup;
 				ActorToSpawn = PowerUpTile;
 			}
 			if (World != nullptr)
