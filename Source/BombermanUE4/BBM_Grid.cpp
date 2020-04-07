@@ -84,7 +84,6 @@ FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
 void UBBM_Grid::BeginDestroy()
 {
 	Super::BeginDestroy();
-
 	for (int i = 0; i < _Width; ++i)
 		delete[] Grid[i];
 	delete[] Grid;

@@ -37,9 +37,6 @@ ABBM_Character::ABBM_Character()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-
-	/*MaxHealth = 100;
-	CurrentHealth = MaxHealth;*/
 }
 
 void ABBM_Character::DestroySelf()
@@ -50,11 +47,9 @@ void ABBM_Character::DestroySelf()
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
-	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	//PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ABBM_Character::ThrowBomb);
 
 	PlayerInputComponent->BindAction("PlaceBomb", IE_Released, this, &ABBM_Character::PlaceBomb);
+	PlayerInputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_Character::RestartLevel);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABBM_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABBM_Character::MoveRight);
@@ -64,39 +59,6 @@ void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ABBM_Character::LookUpAtRate);
 }
-
-/*
-void ABBM_Character::OnRep_CurrentHealth()
-{
-	OnHealthUpdate();
-}
-
-void ABBM_Character::OnHealthUpdate()
-{
-	if (HasAuthority())
-	{
-		FString healthLog = FString::Printf(TEXT("%s agora tem %f de vida restante"), *GetFName().ToString(), CurrentHealth);
-		if (GEngine != nullptr)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Blue, healthLog);
-		}
-	}
-}
-
-void ABBM_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AMPT_Character, CurrentHealth);
-}
-
-void ABBM_Character::ThrowBomb_Implementation()
-{
-	if (HasAuthority())
-	{
-		GetWorld()->SpawnActor<AMPT_Bomb>(AMPT_Bomb::StaticClass(), GetActorLocation() + FVector(20, 20, 0), FRotator(0, 0, 0));
-	}
-}*/
 
 void ABBM_Character::TurnAtRate(float Rate)
 {
@@ -108,17 +70,17 @@ void ABBM_Character::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
-/*
-float ABBM_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+void ABBM_Character::RestartLevel_Implementation()
 {
-	float DamageApplied = CurrentHealth - DamageAmount;
 	if (HasAuthority())
 	{
-		CurrentHealth = FMath::Clamp(DamageApplied, 0.f, MaxHealth);
-		OnHealthUpdate();
+		UWorld* World = GetWorld();
+		if (World != nullptr)
+		{
+			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
+		}
 	}
-	return DamageApplied;
-}*/
+}
 
 void ABBM_Character::MoveForward(float Value)
 {

@@ -16,8 +16,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	//void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
 
@@ -30,8 +28,6 @@ public:
 	TSubclassOf<AActor> Bomb;
 
 	int32 Ammo = 1;
-
-	//float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 
@@ -46,23 +42,13 @@ protected:
 
 	void LookUpAtRate(float Rate);	
 
-	/*UFUNCTION(Server, Reliable)
-	void ThrowBomb();*/
+	UFUNCTION(Server, Reliable)
+	void RestartLevel();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void IncreaseAmmo();
 
-	/*UFUNCTION()
-	void OnRep_CurrentHealth();*/
-
-	//void OnHealthUpdate();
-
-	/*UPROPERTY(EditDefaultsOnly)
-		float MaxHealth;
-
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentHealth)
-		float CurrentHealth;*/
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
