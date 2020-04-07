@@ -30,7 +30,7 @@ void ABBM_GameMode::PreLogin(const FString& Options, const FString& Address, con
 	}
 	else
 	{
-		CurrentPlayers += 1;
+		CurrentPlayers++;
 	}
 }
 
@@ -46,7 +46,8 @@ void ABBM_GameMode::HandleStartingNewPlayer_Implementation(APlayerController* Ne
 	if (!bStartPlayersAsSpectators && !MustSpectate(NewPlayer) && PlayerCanRestart(NewPlayer))
 	{
 		// Otherwise spawn their pawn immediately
-		RestartPlayerAtTransform(NewPlayer, GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[SpawnedNumber].X, SpawnLocations[SpawnedNumber].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight)));
+		FTransform SpawnPlayerAt = GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[SpawnedNumber].X, SpawnLocations[SpawnedNumber].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight));
+		RestartPlayerAtTransform(NewPlayer, SpawnPlayerAt);
 		SpawnedNumber++;
 	}
 }
