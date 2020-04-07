@@ -16,13 +16,14 @@ public:
 	ABBM_Bomb();
 
 	UPROPERTY(EditAnywhere)
-	int ExplosionRange;
+	int ExplosionRadius;
 
 private:
 
 	UPROPERTY(EditAnywhere)
 	float TimeToExplode;
 
+	UFUNCTION(Server, Reliable)
 	void Explode();
 
 protected:
