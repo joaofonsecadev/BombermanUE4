@@ -50,3 +50,9 @@ void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 		}
 	}
 }
+
+void ABBM_GameMode::Logout(AController* Exiting)
+{
+	Super::Logout(Exiting);
+	ConnectedPlayers--;
+}
