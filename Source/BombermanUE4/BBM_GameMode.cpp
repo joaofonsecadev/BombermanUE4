@@ -1,11 +1,13 @@
 #include "BBM_GameMode.h"
+#include "BBM_GameState.h"
 #include "BBM_Grid.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 ABBM_GameMode::ABBM_GameMode()
 {
-	
+	bStartPlayersAsSpectators = 1;
 }
 
 void ABBM_GameMode::BeginPlay()
@@ -24,29 +26,33 @@ void ABBM_GameMode::InitGame(const FString& MapName, const FString& Options, FSt
 void ABBM_GameMode::PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	Super::PreLogin(Options, Address, UniqueId, ErrorMessage);
-	if (CurrentPlayers >= MaxPlayers)
+	if (ConnectedPlayers >= MaxPlayerNumber)
 	{
 		ErrorMessage = TEXT("max_players_reached");
 	}
 	else
 	{
-		CurrentPlayers += 1;
+		ConnectedPlayers++;
 	}
 }
 
 void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	UE_LOG(LogTemp, Warning, TEXT("Existem %d jogadores agora"), CurrentPlayers);
+	m_PControllerArray.Add(NewPlayer);
+	UE_LOG(LogTemp, Warning, TEXT("Existem %d jogadores agora"), ConnectedPlayers);
+	if ((ConnectedPlayers == MaxPlayerNumber))
+	{
+		for (int8 i = 0; i < m_PControllerArray.Num(); i++)
+		{
+			FTransform SpawnPlayerAt = GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[i].X, SpawnLocations[i].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight));
+			RestartPlayerAtTransform(m_PControllerArray[i], SpawnPlayerAt);
+		}
+	}
 }
 
-void ABBM_GameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+void ABBM_GameMode::Logout(AController* Exiting)
 {
-	// If players should start as spectators, leave them in the spectator state
-	if (!bStartPlayersAsSpectators && !MustSpectate(NewPlayer) && PlayerCanRestart(NewPlayer))
-	{
-		// Otherwise spawn their pawn immediately
-		RestartPlayerAtTransform(NewPlayer, GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[SpawnedNumber].X, SpawnLocations[SpawnedNumber].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight)));
-		SpawnedNumber++;
-	}
+	Super::Logout(Exiting);
+	ConnectedPlayers--;
 }

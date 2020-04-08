@@ -68,8 +68,6 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
 	SpawnedFloor->SetActorLocation(DesiredPosition);
-
-	UE_LOG(LogTemp, Error, TEXT("Grid gerada com sucesso com tamanho %d"), FloorActorCoordinates.Num());
 }
 
 FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)

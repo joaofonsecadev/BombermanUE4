@@ -14,8 +14,8 @@ public:
 	ABBM_GameMode();
 
 	UPROPERTY(EditDefaultsOnly)
-	int8 MaxPlayers = 2;
-	int8 CurrentPlayers = 0;
+	int8 MaxPlayerNumber = 2;
+	int8 ConnectedPlayers = 0;
 	
 	UPROPERTY(EditAnywhere, Category="References")
 	TSubclassOf<AActor> FloorTile;
@@ -46,9 +46,10 @@ protected:
 	virtual void InitGame(const FString & MapName, const FString & Options, FString & ErrorMessage) override;
 	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
-	void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer);
+	//void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer);
+	virtual void Logout(AController* Exiting) override;
 	virtual void BeginPlay() override;
 
 private:
-	int8 SpawnedNumber = 0;
+	TArray<APlayerController*> m_PControllerArray;
 };
