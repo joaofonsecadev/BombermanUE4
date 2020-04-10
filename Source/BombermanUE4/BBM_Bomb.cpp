@@ -49,7 +49,6 @@ void ABBM_Bomb::Explode_Implementation()
 		{
 			for (auto& Hit : OutHits)
 			{
-				//UE_LOG(LogTemp, Error, TEXT("It hit: %s"), *Hit.Actor->GetName());
 				if (Hit.Actor->GetClass()->ImplementsInterface(UBBM_DestructibleObject::StaticClass()))
 				{
 					IBBM_DestructibleObject* DestructibleObject = Cast<IBBM_DestructibleObject>(Hit.Actor);
