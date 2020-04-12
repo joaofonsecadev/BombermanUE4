@@ -40,7 +40,7 @@ ABBM_Character::ABBM_Character()
 
 void ABBM_Character::DestroySelf()
 {
-	UE_LOG(LogTemp, Error, TEXT("Destroy self character!!!!!!!!!!!"));
+	UE_LOG(LogTemp, Error, TEXT("Destroy self character!"));
 	return;
 }
 
