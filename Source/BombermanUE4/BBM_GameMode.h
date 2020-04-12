@@ -52,4 +52,5 @@ protected:
 
 private:
 	TArray<APlayerController*> m_PControllerArray;
+	TEnumAsByte<ENetMode> NetModeEnum;
 };
