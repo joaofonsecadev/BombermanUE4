@@ -1,6 +1,7 @@
 #include "BBM_GameMode.h"
 #include "BBM_GameState.h"
 #include "BBM_Grid.h"
+#include "Engine/EngineBaseTypes.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
@@ -19,6 +20,10 @@ void ABBM_GameMode::BeginPlay()
 void ABBM_GameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
+	if (GetNetMode() != NM_DedicatedServer)
+	{
+		//ConnectedPlayers++;
+	}
 	GridManager = NewObject<UBBM_Grid>(this);
 	GridManager->InitializeGrid(Width, Height, CellSize, FloorTile, FloorPlane,WallTile, DestructibleTile, PowerUpTile);
 }

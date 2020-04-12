@@ -1,7 +1,6 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "BBM_Character.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -51,10 +50,10 @@ void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("PlaceBomb", IE_Released, this, &ABBM_Character::PlaceBomb);
 	PlayerInputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_Character::RestartLevel);
+	PlayerInputComponent->BindAction("ExitLevel", IE_Released, this, &ABBM_Character::ExitLevel);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABBM_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABBM_Character::MoveRight);
-
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &ABBM_Character::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
@@ -69,6 +68,11 @@ void ABBM_Character::TurnAtRate(float Rate)
 void ABBM_Character::LookUpAtRate(float Rate)
 {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void ABBM_Character::ExitLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "MainMenu");
 }
 
 void ABBM_Character::RestartLevel_Implementation()

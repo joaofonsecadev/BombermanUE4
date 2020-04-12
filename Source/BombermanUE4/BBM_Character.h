@@ -32,18 +32,18 @@ public:
 protected:
 
 	void MoveForward(float Value);
-
 	void MoveRight(float Value);
+	void TurnAtRate(float Rate);
+	void LookUpAtRate(float Rate);
+	void ExitLevel();
 
 	UFUNCTION(Server, Reliable)
 	void PlaceBomb();
 
-	void TurnAtRate(float Rate);
-
-	void LookUpAtRate(float Rate);	
-
 	UFUNCTION(Server, Reliable)
 	void RestartLevel();
+
+
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
