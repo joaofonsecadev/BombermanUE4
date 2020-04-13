@@ -22,9 +22,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
-	UFUNCTION(Server, Reliable)
-	void RestartLevel();
-	void ExitLevel();
 	virtual void DestroySelf() override;
 
 	UPROPERTY(EditAnywhere, Category = "References")
@@ -38,12 +35,15 @@ protected:
 	void MoveRight(float Value);
 	void TurnAtRate(float Rate);
 	void LookUpAtRate(float Rate);
+	void ExitLevel();
 
 	UFUNCTION(Server, Reliable)
 	void PlaceBomb();
 
+	UFUNCTION(Server, Reliable)
+	void RestartLevel();
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	void IncreaseAmmo();
 
 private:

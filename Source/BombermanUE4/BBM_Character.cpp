@@ -9,7 +9,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine.h"
 #include "Engine/World.h"
-#include "Engine/Engine.h"
 
 ABBM_Character::ABBM_Character()
 {
