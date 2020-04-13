@@ -48,7 +48,6 @@ protected:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	//void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer);
 	virtual void Logout(AController* Exiting) override;
-	virtual void BeginPlay() override;
 
 private:
 	TArray<APlayerController*> m_PControllerArray;

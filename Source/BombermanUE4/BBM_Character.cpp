@@ -39,8 +39,8 @@ ABBM_Character::ABBM_Character()
 
 void ABBM_Character::DestroySelf()
 {
-	UE_LOG(LogTemp, Error, TEXT("Destroy self character!"));
-	return;
+	FString DeathLog = FString::Printf(TEXT("You have died.\nBut since this is a prototype, nothing happens."), GetFName().ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, DeathLog);
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

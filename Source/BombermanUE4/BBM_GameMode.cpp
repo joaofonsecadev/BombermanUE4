@@ -11,19 +11,9 @@ ABBM_GameMode::ABBM_GameMode()
 	bStartPlayersAsSpectators = 1;
 }
 
-void ABBM_GameMode::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 void ABBM_GameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
-	if (GetNetMode() != NM_DedicatedServer)
-	{
-		//ConnectedPlayers++;
-	}
 	GridManager = NewObject<UBBM_Grid>(this);
 	GridManager->InitializeGrid(Width, Height, CellSize, FloorTile, FloorPlane,WallTile, DestructibleTile, PowerUpTile);
 }
@@ -31,21 +21,15 @@ void ABBM_GameMode::InitGame(const FString& MapName, const FString& Options, FSt
 void ABBM_GameMode::PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	Super::PreLogin(Options, Address, UniqueId, ErrorMessage);
-	if (ConnectedPlayers >= MaxPlayerNumber)
-	{
-		ErrorMessage = TEXT("max_players_reached");
-	}
-	else
-	{
-		ConnectedPlayers++;
-	}
+	if (ConnectedPlayers >= MaxPlayerNumber) ErrorMessage = TEXT("max_players_reached");
 }
 
 void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
+	ConnectedPlayers++;
 	m_PControllerArray.Add(NewPlayer);
-	UE_LOG(LogTemp, Warning, TEXT("Existem %d jogadores agora"), ConnectedPlayers);
+	UE_LOG(LogTemp, Warning, TEXT("There are %d players now."), ConnectedPlayers);
 	if ((ConnectedPlayers == MaxPlayerNumber))
 	{
 		for (int8 i = 0; i < m_PControllerArray.Num(); i++)
@@ -60,4 +44,6 @@ void ABBM_GameMode::Logout(AController* Exiting)
 {
 	Super::Logout(Exiting);
 	ConnectedPlayers--;
+	m_PControllerArray.Remove(Cast<APlayerController>(Exiting));
+	UE_LOG(LogTemp, Warning, TEXT("There are %d players now."), ConnectedPlayers);
 }
