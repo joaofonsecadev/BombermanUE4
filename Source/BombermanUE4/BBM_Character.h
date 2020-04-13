@@ -42,11 +42,8 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void RestartLevel();
-
-
-
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	void IncreaseAmmo();
 
 private:
