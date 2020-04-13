@@ -39,7 +39,7 @@ ABBM_Character::ABBM_Character()
 
 void ABBM_Character::DestroySelf()
 {
-	FString DeathLog = FString::Printf(TEXT("You have died.\nBut since this is a prototype, nothing happens."), GetFName().ToString());
+	FString DeathLog = FString::Printf(TEXT("You have died.\nBut since this is a prototype, nothing happens."));
 	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, DeathLog);
 }
 
