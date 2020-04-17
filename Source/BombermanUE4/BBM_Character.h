@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BBM_DestructibleObject.h"
+#include "BBM_Bomb.h"
 #include "BBM_Character.generated.h"
 
 UCLASS(config = Game)
@@ -44,6 +45,8 @@ protected:
 	void RestartLevel();
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION()
 	void IncreaseAmmo();
 
 private:
