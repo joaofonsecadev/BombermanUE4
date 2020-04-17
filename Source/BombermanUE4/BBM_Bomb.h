@@ -18,7 +18,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	int ExplosionRadius;
 
-	DECLARE_EVENT(ABBM_Bomb, FBombExploded)
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBombExploded);
 	FBombExploded& OnExplode() { return BombExploded; }
 
 private:
