@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "BBM_UI_ConnectToIP.generated.h"
+class UButton;
 
 /**
  * 
@@ -16,4 +17,16 @@ class BOMBERMANUE4_API UBBM_UI_ConnectToIP : public UUserWidget
 	
 public:
 	UBBM_UI_ConnectToIP(const FObjectInitializer& ObjectInitializer);
+
+protected:
+	virtual bool Initialize() override;
+
+private:
+	UButton* m_BtnConnect;
+
+	UFUNCTION()
+	void ConnectToServerWithIP();
+
+	UFUNCTION()
+	void ExitCurrentScreen();
 };
