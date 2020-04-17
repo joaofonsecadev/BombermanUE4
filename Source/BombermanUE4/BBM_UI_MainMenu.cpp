@@ -36,7 +36,6 @@ void UBBM_UI_MainMenu::ShowConnectToIPUI()
 	{
 		UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
 		ConnectToIP->AddToViewport();
-		UE_LOG(LogTemp, Warning, TEXT("Hey, a UI para ligar ao IP devia estar a aparecer agora...!"));
 	}
 }
 

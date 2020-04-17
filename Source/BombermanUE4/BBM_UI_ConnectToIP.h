@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "BBM_UI_ConnectToIP.generated.h"
 class UButton;
+class UTextBlock;
+class UEditableTextBox;
 
 /**
  * 
@@ -23,10 +25,13 @@ protected:
 
 private:
 	UButton* m_BtnConnect;
+	UTextBlock* m_TxtBtnConnect;
+	UEditableTextBox* m_ETxtInputIP;
+	bool bIsConnecting = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName m_MapMainMenuName = FName(TEXT("MainMenu"));
 
 	UFUNCTION()
 	void ConnectToServerWithIP();
-
-	UFUNCTION()
-	void ExitCurrentScreen();
 };
