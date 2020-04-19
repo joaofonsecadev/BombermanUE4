@@ -57,6 +57,7 @@ void ABBM_Bomb::Explode_Implementation()
 			}
 		}
 
+		BombExploded.Broadcast();
 		Destroy();
 	}	
 }
