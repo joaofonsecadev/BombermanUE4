@@ -37,8 +37,7 @@ void UBBM_UI_ConnectToIP::ConnectToServerWithIP()
         bIsConnecting = true;
 
         FString IPToConnect = m_ETxtInputIP->GetText().ToString();
-        FString Command = "open " + IPToConnect;   
-        GetWorld()->Exec(GetWorld(), *Command);
+        GetOwningPlayer()->ClientTravel(IPToConnect, ETravelType::TRAVEL_Absolute, false);
 
         FString ConnectingText = "Connecting to " + IPToConnect + " ...";
         m_ETxtInputIP->SetText(FText::FromString(ConnectingText));
