@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	int ExplosionRadius;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBombExploded);
+	FBombExploded& OnExplode() { return BombExploded; }
+
 private:
 
 	UPROPERTY(EditAnywhere)
@@ -25,6 +28,8 @@ private:
 
 	UFUNCTION(Server, Reliable)
 	void Explode();
+
+	FBombExploded BombExploded;
 
 protected:
 	// Called when the game starts or when spawned

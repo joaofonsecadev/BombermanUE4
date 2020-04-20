@@ -129,10 +129,10 @@ void ABBM_Character::PlaceBomb_Implementation()
 			{
 				FVector TileLocation = HitResult->Actor->GetActorLocation();
 				FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
-				GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+				AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+				ABBM_Bomb* SpawnedBomb = Cast<ABBM_Bomb>(SpawnedActor);
 				Ammo--;
-				FTimerHandle handle;
-				GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Character::IncreaseAmmo, 3.0f, false);
+				SpawnedBomb->OnExplode().AddDynamic(this, &ABBM_Character::IncreaseAmmo);
 			}
 		}
 	}	
