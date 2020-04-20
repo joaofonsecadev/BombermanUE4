@@ -41,8 +41,6 @@ void ABBM_Bomb::Explode_Implementation()
 
 		FCollisionShape CollisionSphere = FCollisionShape::MakeSphere(ExplosionRadius);
 
-		DrawDebugSphere(GetWorld(), ActorLocation, CollisionSphere.GetSphereRadius(), 10, FColor::Purple, true);
-
 		bool bIsHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionSphere);
 
 		if (bIsHit)
