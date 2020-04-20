@@ -10,8 +10,7 @@
 UENUM()
 enum class PowerUpType : uint8
 {
-	MoreBombs,
-	KickBombs
+	MoreBombs
 };
 
 UCLASS()
@@ -26,14 +25,10 @@ public:
 	virtual void DestroySelf() override;
 	
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> KickBombsPowerUp;
-	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> MoreBombsPowerUp;
 
 	UPROPERTY(VisibleAnywhere)
 	PowerUpType Type;
-
-	bool bHasPowerUp = false;
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,7 +37,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void SetPowerUpType();
-	void SpawnPowerUp();
 };
