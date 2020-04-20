@@ -33,6 +33,7 @@ void ABBM_Wall::DestroySelf()
 		SpawnPowerUp();
 
 	Destroy();
+	return;
 }
 
 void ABBM_Wall::SetPowerUpType()
