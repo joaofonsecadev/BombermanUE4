@@ -41,7 +41,7 @@ void ABBM_Wall::DestroySelf()
 
 		FVector SpawnPosition = GetActorLocation();
 		GetWorld()->SpawnActor<AActor>(MoreBombsPowerUp, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
-	}
+	} 
 
 	Destroy();
 }
