@@ -18,7 +18,7 @@ protected:
 	virtual void SetupInputComponent() override;
 
 private:
-	UFUNCTION(Server, Reliable)
-	void RestartServerLevel();
+	/*UFUNCTION(Server, Reliable)
+	void RestartServerLevel();*/
 	void ExitLevel();
 };

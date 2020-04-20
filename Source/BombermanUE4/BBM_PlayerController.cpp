@@ -7,10 +7,12 @@
 void ABBM_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	InputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_PlayerController::RestartLevel);
+	//InputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_PlayerController::RestartLevel);
 	InputComponent->BindAction("ExitLevel", IE_Released, this, &ABBM_PlayerController::ExitLevel);
 }
 
+//TODO: execute server side function which can't be called from here apparently
+/*
 void ABBM_PlayerController::RestartServerLevel_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Going to call for a level restart."));
@@ -23,7 +25,7 @@ void ABBM_PlayerController::RestartServerLevel_Implementation()
 			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
 		}
 	}
-}
+}*/
 
 void ABBM_PlayerController::ExitLevel()
 {

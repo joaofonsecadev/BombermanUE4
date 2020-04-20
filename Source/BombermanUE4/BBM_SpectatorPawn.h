@@ -14,10 +14,10 @@ class BOMBERMANUE4_API ABBM_SpectatorPawn : public ASpectatorPawn
 {
 	GENERATED_BODY()
 	
-/*
+
 protected:
 	UFUNCTION(Server, Reliable)
-	void RestartLevel();
-	void ExitLevel();
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;*/
+	void RestartServerLevel();
+	//void ExitLevel();
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

@@ -43,6 +43,9 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void PlaceBomb();
 
+	UFUNCTION(Server, Reliable)
+	void RestartServerLevel();
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
