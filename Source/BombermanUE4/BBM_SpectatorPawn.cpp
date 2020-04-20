@@ -2,6 +2,7 @@
 
 
 #include "BBM_SpectatorPawn.h"
+/*
 #include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -27,4 +28,4 @@ void ABBM_SpectatorPawn::RestartLevel_Implementation()
 			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
 		}
 	}
-}
+}*/
