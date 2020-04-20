@@ -13,6 +13,7 @@ void ABBM_PlayerController::SetupInputComponent()
 
 void ABBM_PlayerController::RestartServerLevel_Implementation()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Going to call for a level restart."));
 	if (HasAuthority())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Calling for a level restart."));

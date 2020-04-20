@@ -30,6 +30,9 @@ public:
 
 	int32 Ammo = 1;
 
+	UFUNCTION()
+	void IncreaseAmmo();
+
 protected:
 
 	void MoveForward(float Value);
@@ -39,9 +42,6 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void PlaceBomb();
-
-	UFUNCTION()
-	void IncreaseAmmo();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
