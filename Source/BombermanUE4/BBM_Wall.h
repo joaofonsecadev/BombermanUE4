@@ -7,12 +7,6 @@
 #include "BBM_DestructibleObject.h"
 #include "BBM_Wall.generated.h"
 
-UENUM()
-enum class PowerUpType : uint8
-{
-	MoreBombs
-};
-
 UCLASS()
 class BOMBERMANUE4_API ABBM_Wall : public AActor, public IBBM_DestructibleObject
 {
@@ -26,9 +20,6 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> MoreBombsPowerUp;
-
-	UPROPERTY(VisibleAnywhere)
-	PowerUpType Type;
 
 protected:
 	// Called when the game starts or when spawned

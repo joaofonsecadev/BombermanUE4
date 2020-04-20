@@ -28,7 +28,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> Bomb;
 
-	int32 Ammo = 1;
+	int32 Ammo = 1;	
+
+	UFUNCTION()
+	void IncreaseAmmo();
 
 protected:
 
@@ -44,10 +47,7 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void RestartLevel();
 	
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION()
-	void IncreaseAmmo();
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;	
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
