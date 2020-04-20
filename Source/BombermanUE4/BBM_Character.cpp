@@ -41,6 +41,7 @@ void ABBM_Character::DestroySelf()
 {
 	FString DeathLog = FString::Printf(TEXT("You have died.\nBut since this is a prototype, nothing happens."));
 	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, DeathLog);
+	//Destroy();
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
