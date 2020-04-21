@@ -11,7 +11,7 @@ ABBM_PowerUp::ABBM_PowerUp()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SphereRadius = 100.0f;
+	SphereRadius = 25.0f;
 
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Component"));
 	CollisionSphere->InitSphereRadius(SphereRadius);

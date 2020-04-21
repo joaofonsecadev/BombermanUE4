@@ -36,11 +36,8 @@ void ABBM_Bomb::Explode_Implementation()
 	if (HasAuthority()) 
 	{
 		TArray<FHitResult> OutHits;
-
 		FVector ActorLocation = GetActorLocation();
-
 		FCollisionShape CollisionSphere = FCollisionShape::MakeSphere(ExplosionRadius);
-
 		bool bIsHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionSphere);
 
 		if (bIsHit)
@@ -54,8 +51,10 @@ void ABBM_Bomb::Explode_Implementation()
 				}
 			}
 		}
-
+		
+		FActorSpawnParameters SpawnParams;
+		GetWorld()->SpawnActor<AActor>(BombExplosionFX, GetActorLocation(), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 		BombExploded.Broadcast();
 		Destroy();
-	}	
+	}
 }
