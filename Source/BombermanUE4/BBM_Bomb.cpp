@@ -38,7 +38,8 @@ void ABBM_Bomb::Explode_Implementation()
 		TArray<FHitResult> OutHits;
 		FVector ActorLocation = GetActorLocation();
 		FCollisionShape CollisionSphere = FCollisionShape::MakeSphere(ExplosionRadius);
-		bool bIsHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionSphere);
+		UWorld* World = GetWorld();
+		bool bIsHit = World->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionSphere);
 
 		if (bIsHit)
 		{
@@ -53,7 +54,19 @@ void ABBM_Bomb::Explode_Implementation()
 		}
 		
 		FActorSpawnParameters SpawnParams;
-		GetWorld()->SpawnActor<AActor>(BombExplosionFX, GetActorLocation(), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		FVector ActorPosition = GetActorLocation();
+		TArray<FVector> SpawnPositions;
+		SpawnPositions.Add(ActorPosition);
+		SpawnPositions.Add(FVector(ActorPosition.X + 100, ActorPosition.Y, ActorPosition.Z));
+		SpawnPositions.Add(FVector(ActorPosition.X - 100, ActorPosition.Y, ActorPosition.Z));
+		SpawnPositions.Add(FVector(ActorPosition.X, ActorPosition.Y + 100, ActorPosition.Z));
+		SpawnPositions.Add(FVector(ActorPosition.X, ActorPosition.Y - 100, ActorPosition.Z));
+
+		for (int32 i = 0; i < SpawnPositions.Num(); i++)
+		{
+			World->SpawnActor<AActor>(BombExplosionFX, SpawnPositions[i], FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		}		
+
 		BombExploded.Broadcast();
 		Destroy();
 	}
