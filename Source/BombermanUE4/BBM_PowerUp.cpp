@@ -41,7 +41,7 @@ void ABBM_PowerUp::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 		ABBM_Character* Player = Cast<ABBM_Character>(OtherActor);
 		if (Player != nullptr) 
 		{
-			Player->IncreaseAmmo();
+			Player->IncreaseAmmo(); 
 			Destroy();
 		}
 	}
