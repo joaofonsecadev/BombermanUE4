@@ -39,7 +39,7 @@ ABBM_Character::ABBM_Character()
 
 void ABBM_Character::DestroySelf()
 {
-	
+	DisableInput(nullptr);
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
