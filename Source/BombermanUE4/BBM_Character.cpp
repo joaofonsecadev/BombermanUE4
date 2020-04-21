@@ -48,8 +48,7 @@ void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("PlaceBomb", IE_Released, this, &ABBM_Character::PlaceBomb);
-	PlayerInputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_Character::RestartLevel);
-	PlayerInputComponent->BindAction("ExitLevel", IE_Released, this, &ABBM_Character::ExitLevel);
+	PlayerInputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_Character::RestartServerLevel);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABBM_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABBM_Character::MoveRight);
@@ -67,23 +66,6 @@ void ABBM_Character::TurnAtRate(float Rate)
 void ABBM_Character::LookUpAtRate(float Rate)
 {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-}
-
-void ABBM_Character::ExitLevel()
-{
-	UGameplayStatics::OpenLevel(GetWorld(), "MainMenu");
-}
-
-void ABBM_Character::RestartLevel_Implementation()
-{
-	if (HasAuthority())
-	{
-		UWorld* World = GetWorld();
-		if (World != nullptr)
-		{
-			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
-		}
-	}
 }
 
 void ABBM_Character::MoveForward(float Value)
@@ -135,6 +117,18 @@ void ABBM_Character::PlaceBomb_Implementation()
 			}
 		}
 	}	
+}
+
+void ABBM_Character::RestartServerLevel_Implementation()
+{
+	if (HasAuthority())
+	{
+		UWorld* World = GetWorld();
+		if (World != nullptr)
+		{
+			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
+		}
+	}
 }
 
 void ABBM_Character::IncreaseAmmo()
