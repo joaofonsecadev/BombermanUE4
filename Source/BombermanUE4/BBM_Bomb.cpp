@@ -57,10 +57,13 @@ void ABBM_Bomb::Explode_Implementation()
 		FVector ActorPosition = GetActorLocation();
 		TArray<FVector> SpawnPositions;
 		SpawnPositions.Add(ActorPosition);
-		SpawnPositions.Add(FVector(ActorPosition.X + 100, ActorPosition.Y, ActorPosition.Z));
-		SpawnPositions.Add(FVector(ActorPosition.X - 100, ActorPosition.Y, ActorPosition.Z));
-		SpawnPositions.Add(FVector(ActorPosition.X, ActorPosition.Y + 100, ActorPosition.Z));
-		SpawnPositions.Add(FVector(ActorPosition.X, ActorPosition.Y - 100, ActorPosition.Z));
+		for (int i = 1; i <= ExplosionRange; i++)
+		{
+			SpawnPositions.Add(FVector(ActorPosition.X + (100 * i), ActorPosition.Y, ActorPosition.Z));
+			SpawnPositions.Add(FVector(ActorPosition.X - (100 * i), ActorPosition.Y, ActorPosition.Z));
+			SpawnPositions.Add(FVector(ActorPosition.X, ActorPosition.Y + (100 * i), ActorPosition.Z));
+			SpawnPositions.Add(FVector(ActorPosition.X, ActorPosition.Y - (100 * i), ActorPosition.Z));
+		}
 
 		for (int32 i = 0; i < SpawnPositions.Num(); i++)
 		{

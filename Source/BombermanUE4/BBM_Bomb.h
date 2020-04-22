@@ -17,7 +17,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int ExplosionRadius;
-	UPROPERTY(EditAnywhere, Category = "References")
+	UPROPERTY(EditAnywhere)
+	int ExplosionRange;
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> BombExplosionFX;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBombExploded);
