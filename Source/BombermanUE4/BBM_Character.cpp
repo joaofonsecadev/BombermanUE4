@@ -40,7 +40,6 @@ ABBM_Character::ABBM_Character()
 
 void ABBM_Character::DestroySelf_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Sooo.... I'm dying now ok?"));
 	DisableInput(nullptr);
 }
 
