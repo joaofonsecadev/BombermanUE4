@@ -37,7 +37,8 @@ ABBM_Character::ABBM_Character()
 	FollowCamera->bUsePawnControlRotation = false;
 }
 
-void ABBM_Character::DestroySelf()
+
+void ABBM_Character::DestroySelf_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Sooo.... I'm dying now ok?"));
 	DisableInput(nullptr);

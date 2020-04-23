@@ -23,6 +23,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
+	UFUNCTION(Client, Unreliable)
 	virtual void DestroySelf() override;
 
 	UPROPERTY(EditAnywhere, Category = "References")
