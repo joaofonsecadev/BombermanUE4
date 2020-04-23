@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine.h"
 #include "Engine/World.h"
+#include "Net/UnrealNetwork.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -38,9 +39,16 @@ ABBM_Character::ABBM_Character()
 }
 
 
+void ABBM_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABBM_Character, bIsDying);
+}
+
 void ABBM_Character::DestroySelf_Implementation()
 {
 	DisableInput(nullptr);
+	SetPlayerAsDying();
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -128,6 +136,27 @@ void ABBM_Character::RestartServerLevel_Implementation()
 		{
 			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
 		}
+	}
+}
+
+void ABBM_Character::SetPlayerAsDying_Implementation()
+{
+	bIsDying = true;
+}
+
+void ABBM_Character::OnRep_bIsDying()
+{
+	UE_LOG(LogTemp, Warning, TEXT("A ativar pos replicação"));
+
+	if (!bIsDead)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
+
+		USkeletalMeshComponent* CharacterMesh = GetMesh();
+		CharacterMesh->SetSimulatePhysics(true);
+		CharacterMesh->bBlendPhysics = true;
+
+		bIsDead = true;
 	}
 }
 

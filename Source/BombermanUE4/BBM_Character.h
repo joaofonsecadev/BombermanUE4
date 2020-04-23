@@ -13,9 +13,17 @@ class ABBM_Character : public ACharacter, public IBBM_DestructibleObject
 
 public:
 	ABBM_Character();
-
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION(Client, Unreliable)
+	virtual void DestroySelf() override;
+
+	UFUNCTION()
+	void IncreaseAmmo();
+
+	int32 Ammo = 1;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
@@ -23,19 +31,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
-	UFUNCTION(Client, Unreliable)
-	virtual void DestroySelf() override;
-
 	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> Bomb;
 
-	int32 Ammo = 1;
-
-	UFUNCTION()
-	void IncreaseAmmo();
-
 protected:
-
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void TurnAtRate(float Rate);
@@ -47,12 +47,21 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void RestartServerLevel();
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UFUNCTION(Server, Reliable)
+	void SetPlayerAsDying();
+
+	UFUNCTION()
+	void OnRep_bIsDying();
+
+	UPROPERTY(ReplicatedUsing = OnRep_bIsDying)
+	bool bIsDying = false;
+
+	bool bIsDead = false;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* CameraBoom;
+	class USpringArmComponent* CameraBoom;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* FollowCamera;
+	class UCameraComponent* FollowCamera;
 };
