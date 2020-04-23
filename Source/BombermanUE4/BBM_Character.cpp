@@ -155,6 +155,7 @@ void ABBM_Character::OnRep_bIsDying()
 		USkeletalMeshComponent* CharacterMesh = GetMesh();
 		CharacterMesh->SetSimulatePhysics(true);
 		CharacterMesh->bBlendPhysics = true;
+		CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
 
 		bIsDead = true;
 	}
