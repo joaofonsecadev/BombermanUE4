@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine.h"
 #include "Engine/World.h"
+#include "Net/UnrealNetwork.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -37,10 +38,17 @@ ABBM_Character::ABBM_Character()
 	FollowCamera->bUsePawnControlRotation = false;
 }
 
-void ABBM_Character::DestroySelf()
+
+void ABBM_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	FString DeathLog = FString::Printf(TEXT("You have died.\nBut since this is a prototype, nothing happens."));
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, DeathLog);
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABBM_Character, bIsDying);
+}
+
+void ABBM_Character::DestroySelf_Implementation()
+{
+	DisableInput(nullptr);
+	SetPlayerAsDying();
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -128,6 +136,28 @@ void ABBM_Character::RestartServerLevel_Implementation()
 		{
 			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
 		}
+	}
+}
+
+void ABBM_Character::SetPlayerAsDying_Implementation()
+{
+	bIsDying = true;
+}
+
+void ABBM_Character::OnRep_bIsDying()
+{
+	UE_LOG(LogTemp, Warning, TEXT("A ativar pos replicação"));
+
+	if (!bIsDead)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
+
+		USkeletalMeshComponent* CharacterMesh = GetMesh();
+		CharacterMesh->SetSimulatePhysics(true);
+		CharacterMesh->bBlendPhysics = true;
+		CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+
+		bIsDead = true;
 	}
 }
 
