@@ -16,7 +16,9 @@ public:
 	ABBM_Bomb();
 
 	UPROPERTY(EditAnywhere)
-	int ExplosionRadius;
+	FVector Min;
+	UPROPERTY(EditAnywhere)
+	FVector Max;
 	UPROPERTY(EditAnywhere)
 	int ExplosionRange;
 	UPROPERTY(EditAnywhere)
