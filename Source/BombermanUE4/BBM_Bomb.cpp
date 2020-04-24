@@ -22,11 +22,6 @@ void ABBM_Bomb::BeginPlay()
 	
 	FTimerHandle handle;
 	GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Bomb::Explode, TimeToExplode, false);
-
-	FVector VerticalBoxShape = FVector(50 + (ExplosionRange * 100), 50, 100);
-	DrawDebugBox(GetWorld(), GetActorLocation(), VerticalBoxShape, FColor::Purple, false, 100.0f, 0, 5.0f);
-	FVector HorizontalBoxShape = FVector(50, 50 + (ExplosionRange * 100), 100);
-	DrawDebugBox(GetWorld(), GetActorLocation(), HorizontalBoxShape, FColor::Purple, false, 100.0f, 0, 5.0f);
 }
 
 // Called every frame
@@ -43,15 +38,15 @@ void ABBM_Bomb::Explode_Implementation()
 		FVector ActorLocation = GetActorLocation();		
 		UWorld* World = GetWorld();
 
-		TArray<FHitResult> VerticalOutHits;		
+		TArray<FHitResult> VerticalOutHits;
 		TArray<FHitResult> HorizontalOutHits;
 		FVector VerticalBoxShape = FVector(50 + (ExplosionRange * 100), 50, 100);
 		FCollisionShape VerticalCollisionBox = FCollisionShape::MakeBox(VerticalBoxShape);
 		FVector HorizontalBoxShape = FVector(50, 50 + (ExplosionRange * 100), 100);
 		FCollisionShape HorizontalCollisionBox = FCollisionShape::MakeBox(HorizontalBoxShape);
 		
-		bool bIsVerticalHit = World->SweepMultiByChannel(VerticalOutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, VerticalCollisionBox);
-		bool bIsHorizontalHit = World->SweepMultiByChannel(HorizontalOutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, HorizontalCollisionBox);
+		bool bIsVerticalHit = World->SweepMultiByChannel(VerticalOutHits, ActorLocation, ActorLocation - FVector(0.0f, 0.0f, 1.0f), FQuat::Identity, ECC_WorldStatic, VerticalCollisionBox);
+		bool bIsHorizontalHit = World->SweepMultiByChannel(HorizontalOutHits, ActorLocation, ActorLocation - FVector(0.0f, 0.0f, 1.0f), FQuat::Identity, ECC_WorldStatic, HorizontalCollisionBox);
 
 		if (bIsVerticalHit)
 		{
