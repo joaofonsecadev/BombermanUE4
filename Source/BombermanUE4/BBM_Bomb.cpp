@@ -28,24 +28,29 @@ void ABBM_Bomb::BeginPlay()
 void ABBM_Bomb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 void ABBM_Bomb::Explode_Implementation()
 {
 	if (HasAuthority()) 
 	{
-		TArray<FHitResult> OutHits;
+		FVector ActorLocation = GetActorLocation();		
+		UWorld* World = GetWorld();
 
-		FVector ActorLocation = GetActorLocation();
+		TArray<FHitResult> VerticalOutHits;
+		TArray<FHitResult> HorizontalOutHits;
+		FVector VerticalBoxShape = FVector(50 + (ExplosionRange * 100), 50, 100);
+		FCollisionShape VerticalCollisionBox = FCollisionShape::MakeBox(VerticalBoxShape);
+		FVector HorizontalBoxShape = FVector(50, 50 + (ExplosionRange * 100), 100);
+		FCollisionShape HorizontalCollisionBox = FCollisionShape::MakeBox(HorizontalBoxShape);
+		
+		bool bIsVerticalHit = World->SweepMultiByChannel(VerticalOutHits, ActorLocation, ActorLocation - FVector(0.0f, 0.0f, 1.0f), FQuat::Identity, ECC_WorldStatic, VerticalCollisionBox);
+		bool bIsHorizontalHit = World->SweepMultiByChannel(HorizontalOutHits, ActorLocation, ActorLocation - FVector(0.0f, 0.0f, 1.0f), FQuat::Identity, ECC_WorldStatic, HorizontalCollisionBox);
 
-		FCollisionShape CollisionSphere = FCollisionShape::MakeSphere(ExplosionRadius);
-
-		bool bIsHit = GetWorld()->SweepMultiByChannel(OutHits, ActorLocation, ActorLocation, FQuat::Identity, ECC_WorldStatic, CollisionSphere);
-
-		if (bIsHit)
+		if (bIsVerticalHit)
 		{
-			for (auto& Hit : OutHits)
+			for (auto& Hit : VerticalOutHits)
 			{
 				if (Hit.Actor->GetClass()->ImplementsInterface(UBBM_DestructibleObject::StaticClass()))
 				{
@@ -55,7 +60,36 @@ void ABBM_Bomb::Explode_Implementation()
 			}
 		}
 
+		if (bIsHorizontalHit)
+		{
+			for (auto& Hit : HorizontalOutHits)
+			{
+				if (Hit.Actor->GetClass()->ImplementsInterface(UBBM_DestructibleObject::StaticClass()))
+				{
+					IBBM_DestructibleObject* DestructibleObject = Cast<IBBM_DestructibleObject>(Hit.Actor);
+					DestructibleObject->DestroySelf();
+				}
+			}
+		}
+
+		FActorSpawnParameters SpawnParams;
+		TArray<FVector> SpawnPositions;
+		SpawnPositions.Add(ActorLocation);
+
+		for (int32 i = 1; i <= ExplosionRange; i++)
+		{
+			SpawnPositions.Add(FVector(ActorLocation.X + (100 * i), ActorLocation.Y, ActorLocation.Z));
+			SpawnPositions.Add(FVector(ActorLocation.X - (100 * i), ActorLocation.Y, ActorLocation.Z));
+			SpawnPositions.Add(FVector(ActorLocation.X, ActorLocation.Y + (100 * i), ActorLocation.Z));
+			SpawnPositions.Add(FVector(ActorLocation.X, ActorLocation.Y - (100 * i), ActorLocation.Z));
+		}
+
+		for (int32 i = 0; i < SpawnPositions.Num(); i++)
+		{			
+			World->SpawnActor<AActor>(BombExplosionFX, SpawnPositions[i], FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		}		
+
 		BombExploded.Broadcast();
 		Destroy();
-	}	
+	}
 }

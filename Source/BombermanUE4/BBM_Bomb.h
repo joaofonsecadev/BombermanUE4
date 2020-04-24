@@ -16,7 +16,9 @@ public:
 	ABBM_Bomb();
 
 	UPROPERTY(EditAnywhere)
-	int ExplosionRadius;
+	int ExplosionRange;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> BombExplosionFX;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBombExploded);
 	FBombExploded& OnExplode() { return BombExploded; }
