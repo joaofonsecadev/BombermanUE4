@@ -56,18 +56,22 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 		}
 	}
 	
-	int32 IndexToSearchFor = (FloorActorCoordinates.Num() / 2); 
-	FTransform OffsettedTransform = FloorActorCoordinates[IndexToSearchFor]->GetActorTransform();
-	FVector OffsettedPosition = OffsettedTransform.GetLocation();
-	FVector DesiredPosition = FVector(OffsettedPosition.X, OffsettedPosition.Y, OffsettedPosition.Z + 100.0f);
-	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+	FVector GridCenter = GetGridCenterLocation() + FVector(0.0f, 0.0f, 100.0f);
+	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, GridCenter, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
-	SpawnedFloor->SetActorLocation(DesiredPosition);
+	SpawnedFloor->SetActorLocation(GridCenter);
 }
 
 FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
 {
 	return FloorActorCoordinates[(_Width - 2) * FMath::Clamp(x, 0, _Width - 3) + FMath::Clamp(y, 0, _Height - 3)]->GetActorTransform();
+}
+
+FVector UBBM_Grid::GetGridCenterLocation()
+{
+	int32 IndexToSearchFor = (FloorActorCoordinates.Num() / 2);
+	FTransform GridCenterTransform = FloorActorCoordinates[IndexToSearchFor]->GetActorTransform();
+	return GridCenterTransform.GetLocation();
 }
 
 void UBBM_Grid::BeginDestroy()
