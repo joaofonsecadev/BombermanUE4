@@ -10,6 +10,9 @@
 #include "Engine.h"
 #include "Engine/World.h"
 #include "Net/UnrealNetwork.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "BBM_PlayerController.h"
+#include "Engine/Player.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -49,6 +52,26 @@ void ABBM_Character::DestroySelf_Implementation()
 {
 	DisableInput(nullptr);
 	SetPlayerAsDying();
+}
+
+void ABBM_Character::BeginPlay()
+{
+	Super::BeginPlay();
+
+	DynamicMaterial = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), this);
+	FLinearColor PlayerColor;
+	
+	//ABBM_PlayerController* MyPlayerController = Cast<ABBM_PlayerController>(Cast<APlayerController>(GetController()));
+
+	float Random = FMath::FRandRange(0, 100);
+
+	if (Random > 50)
+		PlayerColor = FLinearColor::Blue;
+	else
+		PlayerColor = FLinearColor::Red;
+
+	DynamicMaterial->SetVectorParameterValue("BodyColor", PlayerColor);
+	GetMesh()->SetMaterial(0, DynamicMaterial);
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

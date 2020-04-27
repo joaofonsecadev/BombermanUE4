@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "BBM_PlayerController.h"
 
 ABBM_GameMode::ABBM_GameMode()
 {
@@ -29,6 +30,10 @@ void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 	ConnectedPlayers++;
 	m_PControllerArray.Add(NewPlayer);
+
+	ABBM_PlayerController* AddedPlayer = Cast<ABBM_PlayerController>(NewPlayer);
+	AddedPlayer->PlayerID = m_PControllerArray.Num();
+
 	UE_LOG(LogTemp, Warning, TEXT("There are %d players now."), ConnectedPlayers);
 	if ((ConnectedPlayers == MaxPlayerNumber))
 	{

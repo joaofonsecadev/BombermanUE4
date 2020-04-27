@@ -13,7 +13,11 @@ UCLASS()
 class BOMBERMANUE4_API ABBM_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY()
+	int32 PlayerID;
+
 protected:
 	virtual void SetupInputComponent() override;
 

@@ -32,9 +32,12 @@ public:
 	float BaseLookUpRate;
 
 	UPROPERTY(EditAnywhere, Category = "References")
-	TSubclassOf<AActor> Bomb;
+	TSubclassOf<AActor> Bomb;	
+
+	UMaterialInstanceDynamic* DynamicMaterial;
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void MoveForward(float Value);
 	void MoveRight(float Value);
