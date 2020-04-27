@@ -56,7 +56,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 		}
 	}
 	
-	FVector GridCenter = GetGridCenterLocation() + FVector(0.0f, 0.0f, 100.0f);
+	FVector GridCenter = GetGridCenterLocation();
 	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, GridCenter, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
 	SpawnedFloor->SetActorLocation(GridCenter);
@@ -69,9 +69,7 @@ FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
 
 FVector UBBM_Grid::GetGridCenterLocation()
 {
-	int32 IndexToSearchFor = (FloorActorCoordinates.Num() / 2);
-	FTransform GridCenterTransform = FloorActorCoordinates[IndexToSearchFor]->GetActorTransform();
-	return GridCenterTransform.GetLocation();
+	return FVector((float)(_Width - 1) / 2 * -100, (float)(_Height - 1) / 2 * 100, 0.0f);
 }
 
 void UBBM_Grid::BeginDestroy()
