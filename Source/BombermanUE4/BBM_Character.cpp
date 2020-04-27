@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine.h"
 #include "Engine/World.h"
+#include "Net/UnrealNetwork.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -37,10 +38,17 @@ ABBM_Character::ABBM_Character()
 	FollowCamera->bUsePawnControlRotation = false;
 }
 
-void ABBM_Character::DestroySelf()
+
+void ABBM_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	FString DeathLog = FString::Printf(TEXT("You have died.\nBut since this is a prototype, nothing happens."));
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, DeathLog);
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABBM_Character, bIsDying);
+}
+
+void ABBM_Character::DestroySelf_Implementation()
+{
+	DisableInput(nullptr);
+	SetPlayerAsDying();
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -48,8 +56,7 @@ void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("PlaceBomb", IE_Released, this, &ABBM_Character::PlaceBomb);
-	PlayerInputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_Character::RestartLevel);
-	PlayerInputComponent->BindAction("ExitLevel", IE_Released, this, &ABBM_Character::ExitLevel);
+	PlayerInputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_Character::RestartServerLevel);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABBM_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABBM_Character::MoveRight);
@@ -67,23 +74,6 @@ void ABBM_Character::TurnAtRate(float Rate)
 void ABBM_Character::LookUpAtRate(float Rate)
 {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-}
-
-void ABBM_Character::ExitLevel()
-{
-	UGameplayStatics::OpenLevel(GetWorld(), "MainMenu");
-}
-
-void ABBM_Character::RestartLevel_Implementation()
-{
-	if (HasAuthority())
-	{
-		UWorld* World = GetWorld();
-		if (World != nullptr)
-		{
-			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
-		}
-	}
 }
 
 void ABBM_Character::MoveForward(float Value)
@@ -128,13 +118,47 @@ void ABBM_Character::PlaceBomb_Implementation()
 			{
 				FVector TileLocation = HitResult->Actor->GetActorLocation();
 				FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
-				GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+				AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+				ABBM_Bomb* SpawnedBomb = Cast<ABBM_Bomb>(SpawnedActor);
 				Ammo--;
-				FTimerHandle handle;
-				GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Character::IncreaseAmmo, 3.0f, false);
+				SpawnedBomb->OnExplode().AddDynamic(this, &ABBM_Character::IncreaseAmmo);
 			}
 		}
 	}	
+}
+
+void ABBM_Character::RestartServerLevel_Implementation()
+{
+	if (HasAuthority())
+	{
+		UWorld* World = GetWorld();
+		if (World != nullptr)
+		{
+			World->ServerTravel("/Game/BombermanUE4/Maps/Main");
+		}
+	}
+}
+
+void ABBM_Character::SetPlayerAsDying_Implementation()
+{
+	bIsDying = true;
+}
+
+void ABBM_Character::OnRep_bIsDying()
+{
+	UE_LOG(LogTemp, Warning, TEXT("A ativar pos replicação"));
+
+	if (!bIsDead)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
+
+		USkeletalMeshComponent* CharacterMesh = GetMesh();
+		CharacterMesh->SetSimulatePhysics(true);
+		CharacterMesh->bBlendPhysics = true;
+		CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+
+		bIsDead = true;
+	}
 }
 
 void ABBM_Character::IncreaseAmmo()

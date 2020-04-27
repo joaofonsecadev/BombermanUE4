@@ -7,7 +7,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "Components/StaticMeshComponent.h"
 
-void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> DestructibleTile, TSubclassOf<AActor> PowerUpTile)
+void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> InsideWallsTile)
 {
 	_Width = Width;
 	_Height = Height;
@@ -25,7 +25,7 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	{
 		for (int y = 0; y < _Height; y++)
 		{
-			int32 Random = FMath::FRandRange(0, 3);
+			int32 Random = FMath::FRandRange(0, 2);
 
 			if (x == 0 || y == 0 || x == (_Width - 1) || y == (_Height - 1) || (x % 2 == 0 && y % 2 == 0))
 			{
@@ -39,13 +39,8 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 			}
 			else if (Random == 1)
 			{
-				Grid[x][y] = Destructible;
-				ActorToSpawn = DestructibleTile;
-			}
-			else if (Random == 2)
-			{
-				Grid[x][y] = Powerup;
-				ActorToSpawn = PowerUpTile;
+				Grid[x][y] = InsideWalls;
+				ActorToSpawn = InsideWallsTile;
 			}
 			if (World != nullptr)
 			{

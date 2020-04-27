@@ -16,8 +16,7 @@ ABBM_Wall::ABBM_Wall()
 void ABBM_Wall::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	SetPowerUpType();
+
 }
 
 // Called every frame
@@ -29,40 +28,20 @@ void ABBM_Wall::Tick(float DeltaTime)
 
 void ABBM_Wall::DestroySelf()
 {
-	if(bHasPowerUp)
-		SpawnPowerUp();
+	int32 Random = FMath::FRandRange(0, 100);
+	bool bHasPowerUp = false;
 
-	Destroy();
-	return;
-}
+	if (Random <= 30)	
+		bHasPowerUp = true;
 
-void ABBM_Wall::SetPowerUpType()
-{
 	if (bHasPowerUp) 
 	{
-		int32 Random = FMath::FRandRange(0, 2);
+		FActorSpawnParameters SpawnParams;
+		//TSubclassOf<AActor> ActorToSpawn;		
 
-		if (Random < 1)
-			Type = PowerUpType::KickBombs;
-		else
-			Type = PowerUpType::MoreBombs;
-	}	
-}
-
-void ABBM_Wall::SpawnPowerUp()
-{
-	FActorSpawnParameters SpawnParams;
-	TSubclassOf<AActor> ActorToSpawn;
-
-	switch (Type)
-	{
-	case PowerUpType::KickBombs:
-		ActorToSpawn = KickBombsPowerUp;
-		break;
-	case PowerUpType::MoreBombs:
-		ActorToSpawn = MoreBombsPowerUp;
-		break;
+		FVector SpawnPosition = GetActorLocation();
+		GetWorld()->SpawnActor<AActor>(MoreBombsPowerUp, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	}
 
-	GetWorld()->SpawnActor<AActor>(ActorToSpawn, GetActorLocation(), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+	Destroy();
 }
