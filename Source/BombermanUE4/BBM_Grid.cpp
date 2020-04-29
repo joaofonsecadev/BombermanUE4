@@ -4,10 +4,11 @@
 #include "BBM_Grid.h"
 #include "Engine/World.h"
 #include "Containers/Array.h"
+#include "Camera/CameraActor.h"
 #include "Math/UnrealMathUtility.h"
 #include "Components/StaticMeshComponent.h"
 
-void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> InsideWallsTile)
+void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> InsideWallsTile, TSubclassOf<ACameraActor> CoolCameraClass)
 {
 	_Width = Width;
 	_Height = Height;
@@ -60,6 +61,8 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, GridCenter, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
 	SpawnedFloor->SetActorLocation(GridCenter);
+
+	ACameraActor* SpawnedCamera = World->SpawnActor<ACameraActor>(CoolCameraClass, GridCenter + FVector(0, 0, 1200), FRotator(-90, 0, 0), SpawnParams);
 }
 
 FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
