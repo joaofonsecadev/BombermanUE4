@@ -3,10 +3,20 @@
 
 #include "BBM_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "BBM_Character.h"
+#include "GameFramework/Controller.h"
+#include "Engine/Engine.h"
+#include "UObject/NameTypes.h"
+
+void ABBM_PlayerController::BeginPlay()
+{
+	
+}
 
 void ABBM_PlayerController::SetupInputComponent()
 {
-	Super::SetupInputComponent();
+	Super::SetupInputComponent();	
+
 	//InputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_PlayerController::RestartLevel);
 	InputComponent->BindAction("ExitLevel", IE_Released, this, &ABBM_PlayerController::ExitLevel);
 }

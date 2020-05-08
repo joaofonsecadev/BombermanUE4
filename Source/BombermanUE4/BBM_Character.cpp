@@ -187,10 +187,10 @@ void ABBM_Character::OnRep_bIsDying()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
 
-		USkeletalMeshComponent* CharacterMesh = GetMesh();
-		CharacterMesh->SetSimulatePhysics(true);
-		CharacterMesh->bBlendPhysics = true;
-		CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+		USkeletalMeshComponent* m_CharacterMesh = GetMesh();
+		m_CharacterMesh->SetSimulatePhysics(true);
+		m_CharacterMesh->bBlendPhysics = true;
+		m_CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
 
 		bIsDead = true;
 	}
