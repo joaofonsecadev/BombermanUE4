@@ -4,10 +4,11 @@
 #include "BBM_Grid.h"
 #include "Engine/World.h"
 #include "Containers/Array.h"
+#include "Camera/CameraActor.h"
 #include "Math/UnrealMathUtility.h"
 #include "Components/StaticMeshComponent.h"
 
-void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> InsideWallsTile)
+void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassOf<AActor> FloorTile, TSubclassOf<AActor> FloorPlane, TSubclassOf<AActor> WallTile, TSubclassOf<AActor> InsideWallsTile, TSubclassOf<ACameraActor> CoolCameraClass)
 {
 	_Width = Width;
 	_Height = Height;
@@ -56,18 +57,22 @@ void UBBM_Grid::InitializeGrid(int Width, int Height, float CellSize, TSubclassO
 		}
 	}
 	
-	int32 IndexToSearchFor = (FloorActorCoordinates.Num() / 2); 
-	FTransform OffsettedTransform = FloorActorCoordinates[IndexToSearchFor]->GetActorTransform();
-	FVector OffsettedPosition = OffsettedTransform.GetLocation();
-	FVector DesiredPosition = FVector(OffsettedPosition.X, OffsettedPosition.Y, OffsettedPosition.Z + 100.0f);
-	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, DesiredPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+	FVector GridCenter = GetGridCenterLocation();
+	AActor* SpawnedFloor = World->SpawnActor<AActor>(FloorPlane, GridCenter, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 	SpawnedFloor->SetActorScale3D(FVector(_Height, _Width, 1));
-	SpawnedFloor->SetActorLocation(DesiredPosition);
+	SpawnedFloor->SetActorLocation(GridCenter);
+
+	ACameraActor* SpawnedCamera = World->SpawnActor<ACameraActor>(CoolCameraClass, GridCenter + FVector(0, 0, 1200), FRotator(-90, 0, 0), SpawnParams);
 }
 
 FTransform UBBM_Grid::GetTransformFromGridReferenceCoordiantes(int x, int y)
 {
 	return FloorActorCoordinates[(_Width - 2) * FMath::Clamp(x, 0, _Width - 3) + FMath::Clamp(y, 0, _Height - 3)]->GetActorTransform();
+}
+
+FVector UBBM_Grid::GetGridCenterLocation()
+{
+	return FVector((float)(_Width - 1) / 2 * -100, (float)(_Height - 1) / 2 * 100, 0.0f);
 }
 
 void UBBM_Grid::BeginDestroy()

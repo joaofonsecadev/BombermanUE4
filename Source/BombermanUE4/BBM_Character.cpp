@@ -10,6 +10,7 @@
 #include "Engine.h"
 #include "Engine/World.h"
 #include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -66,6 +67,16 @@ void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ABBM_Character::LookUpAtRate);
 }
 
+void ABBM_Character::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ABBM_Character::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
+
 void ABBM_Character::TurnAtRate(float Rate)
 {
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
@@ -74,6 +85,14 @@ void ABBM_Character::TurnAtRate(float Rate)
 void ABBM_Character::LookUpAtRate(float Rate)
 {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+//TODO isssue #39
+void ABBM_Character::SetMainCamera()
+{
+	/*CoolCamera = FindObject<ACameraActor>(GetWorld(), TEXT("BP_Camera"));
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	PlayerController->SetViewTargetWithBlend(CoolCamera, 0.0f);*/
 }
 
 void ABBM_Character::MoveForward(float Value)
@@ -146,12 +165,8 @@ void ABBM_Character::SetPlayerAsDying_Implementation()
 
 void ABBM_Character::OnRep_bIsDying()
 {
-	UE_LOG(LogTemp, Warning, TEXT("A ativar pos replicação"));
-
 	if (!bIsDead)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
-
 		USkeletalMeshComponent* CharacterMesh = GetMesh();
 		CharacterMesh->SetSimulatePhysics(true);
 		CharacterMesh->bBlendPhysics = true;
