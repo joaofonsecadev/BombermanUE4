@@ -32,12 +32,12 @@ public:
 	float BaseLookUpRate;
 
 	UPROPERTY(EditAnywhere, Category = "References")
-	TSubclassOf<AActor> Bomb;	
+	TSubclassOf<AActor> Bomb;		
 
-	UMaterialInstanceDynamic* DynamicMaterial;
+	UFUNCTION()
+	void SetColor(FLinearColor Color);
 
 protected:
-	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void MoveForward(float Value);
 	void MoveRight(float Value);
@@ -56,6 +56,9 @@ protected:
 	UFUNCTION()
 	void OnRep_bIsDying();
 
+	UFUNCTION()
+	void OnRep_bReplicateMesh();
+
 	UPROPERTY(ReplicatedUsing = OnRep_bIsDying)
 	bool bIsDying = false;
 
@@ -67,4 +70,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	UMaterialInstanceDynamic* m_DynamicMaterial;
+
+	UPROPERTY(ReplicatedUsing = OnRep_bReplicateMesh)
+	FLinearColor m_PlayerColor;
+	
+	void SetColorMesh();
 };

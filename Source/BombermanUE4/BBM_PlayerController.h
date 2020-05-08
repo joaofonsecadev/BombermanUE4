@@ -14,15 +14,12 @@ class BOMBERMANUE4_API ABBM_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-public:
-	UPROPERTY()
-	int32 PlayerID;
-
 protected:
+	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
 private:
 	/*UFUNCTION(Server, Reliable)
 	void RestartServerLevel();*/
-	void ExitLevel();
+	void ExitLevel();	
 };
