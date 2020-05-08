@@ -10,6 +10,9 @@
 #include "Engine.h"
 #include "Engine/World.h"
 #include "Net/UnrealNetwork.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Engine/Player.h"
+#include "BBM_PlayerController.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -36,19 +39,34 @@ ABBM_Character::ABBM_Character()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-}
 
+	SetReplicates(true);
+}
 
 void ABBM_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ABBM_Character, bIsDying);
+	DOREPLIFETIME(ABBM_Character, m_PlayerColor);
 }
 
 void ABBM_Character::DestroySelf_Implementation()
 {
 	DisableInput(nullptr);
 	SetPlayerAsDying();
+}
+
+void ABBM_Character::SetColor(FLinearColor Color)
+{	
+	m_PlayerColor = Color;
+
+	SetColorMesh();
+}
+
+void ABBM_Character::SetColorMesh() 
+{	
+	m_DynamicMaterial = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+	m_DynamicMaterial->SetVectorParameterValue(TEXT("BodyColor"), m_PlayerColor);
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -152,13 +170,18 @@ void ABBM_Character::OnRep_bIsDying()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
 
-		USkeletalMeshComponent* CharacterMesh = GetMesh();
-		CharacterMesh->SetSimulatePhysics(true);
-		CharacterMesh->bBlendPhysics = true;
-		CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+		USkeletalMeshComponent* m_CharacterMesh = GetMesh();
+		m_CharacterMesh->SetSimulatePhysics(true);
+		m_CharacterMesh->bBlendPhysics = true;
+		m_CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
 
 		bIsDead = true;
 	}
+}
+
+void ABBM_Character::OnRep_bReplicateMesh()
+{	
+	SetColorMesh();
 }
 
 void ABBM_Character::IncreaseAmmo()
