@@ -25,6 +25,8 @@ public:
 	TSubclassOf<AActor> WallTile;
 	UPROPERTY(EditAnywhere, Category = "References")
 	TSubclassOf<AActor> InsideWallsTile;
+	UPROPERTY(EditAnywhere, Category = "References")
+	TSubclassOf<ACameraActor> CoolCameraClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Grid Settings")
 	TArray<FVector2D> SpawnLocations;
