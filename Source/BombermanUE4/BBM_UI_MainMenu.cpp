@@ -16,11 +16,11 @@ bool UBBM_UI_MainMenu::Initialize()
 {
 	if (Super::Initialize())
 	{
-		m_BtnHostMatch = Cast<UButton>(GetWidgetFromName(FName(TEXT("Btn_HostMatch"))));
+		//m_BtnHostMatch = Cast<UButton>(GetWidgetFromName(FName(TEXT("Btn_HostMatch"))));
 		m_BtnJoinMatch = Cast<UButton>(GetWidgetFromName(FName(TEXT("Btn_JoinMatch"))));
 		m_BtnExitGame = Cast<UButton>(GetWidgetFromName(FName(TEXT("Btn_ExitGame"))));
 
-		if (m_BtnHostMatch != nullptr) m_BtnHostMatch->SetIsEnabled(false);
+		//if (m_BtnHostMatch != nullptr) m_BtnHostMatch->SetIsEnabled(false);
 		if (m_BtnJoinMatch != nullptr) m_BtnJoinMatch->OnClicked.AddDynamic(this, &UBBM_UI_MainMenu::ShowConnectToIPUI);
 		if (m_BtnExitGame != nullptr) m_BtnExitGame->OnClicked.AddDynamic(this, &UBBM_UI_MainMenu::ExitGame);
 

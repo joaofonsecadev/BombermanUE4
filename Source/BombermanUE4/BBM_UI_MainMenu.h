@@ -22,7 +22,7 @@ protected:
 	virtual bool Initialize() override;
 
 private:
-	UButton* m_BtnHostMatch;
+	//UButton* m_BtnHostMatch;
 	UButton* m_BtnExitGame;
 	UButton* m_BtnJoinMatch;
 	UUserWidget* ConnectToIP;
