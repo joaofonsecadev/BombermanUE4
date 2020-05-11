@@ -157,6 +157,7 @@ void ABBM_Character::PlaceBomb_Implementation()
 				FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
 				AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 				ABBM_Bomb* SpawnedBomb = Cast<ABBM_Bomb>(SpawnedActor);
+				SpawnedBomb->SetBombColor(m_PlayerColor);
 				Ammo--;
 				SpawnedBomb->OnExplode().AddDynamic(this, &ABBM_Character::IncreaseAmmo);
 			}
@@ -196,7 +197,7 @@ void ABBM_Character::OnRep_bIsDying()
 	}
 }
 
-void ABBM_Character::OnRep_bReplicateMesh()
+void ABBM_Character::OnRep_ReplicateMesh()
 {	
 	SetColorMesh();
 }

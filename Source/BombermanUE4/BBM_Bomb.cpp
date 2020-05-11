@@ -6,6 +6,9 @@
 #include "Engine.h"
 #include "DrawDebugHelpers.h"
 #include "BBM_DestructibleObject.h"
+#include "Components/StaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 // Sets default values
 ABBM_Bomb::ABBM_Bomb()
@@ -13,6 +16,7 @@ ABBM_Bomb::ABBM_Bomb()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned
@@ -20,7 +24,8 @@ void ABBM_Bomb::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	FTimerHandle handle;
+	FTimerHandle handle;	
+	GetComponents<UStaticMeshComponent>(MyMeshes);
 	GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Bomb::Explode, TimeToExplode, false);
 }
 
@@ -29,6 +34,28 @@ void ABBM_Bomb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+}
+
+void ABBM_Bomb::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABBM_Bomb, m_BombColor);	
+}
+
+void ABBM_Bomb::SetBombColor(FLinearColor Color)
+{
+	m_BombColor = Color;
+
+	ApplyColorToMesh();
+}
+
+void ABBM_Bomb::ApplyColorToMesh()
+{
+	for (int32 i = 0; i < MyMeshes.Num(); i++)
+	{
+		m_DynamicMaterial = MyMeshes[i]->CreateAndSetMaterialInstanceDynamic(0);
+		m_DynamicMaterial->SetVectorParameterValue(FName("Color"), m_BombColor);
+	}
 }
 
 void ABBM_Bomb::Explode_Implementation()
@@ -92,4 +119,9 @@ void ABBM_Bomb::Explode_Implementation()
 		BombExploded.Broadcast();
 		Destroy();
 	}
+}
+
+void ABBM_Bomb::OnRep_ReplicateMesh()
+{
+	ApplyColorToMesh();
 }
