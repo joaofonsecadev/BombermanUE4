@@ -28,14 +28,8 @@ ABBM_Character::ABBM_Character()
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 0;
-	CameraBoom->TargetOffset = FVector(-300, 0, 1000);
-	CameraBoom->bUsePawnControlRotation = true;
-
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	FollowCamera->SetupAttachment(RootComponent);
 	FollowCamera->bUsePawnControlRotation = false;
 }
 
@@ -72,9 +66,11 @@ void ABBM_Character::BeginPlay()
 	Super::BeginPlay();
 }
 
+#pragma optimize("", off)
 void ABBM_Character::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	SetMainCamera();
 }
 
 void ABBM_Character::TurnAtRate(float Rate)
@@ -90,10 +86,14 @@ void ABBM_Character::LookUpAtRate(float Rate)
 //TODO isssue #39
 void ABBM_Character::SetMainCamera()
 {
-	/*CoolCamera = FindObject<ACameraActor>(GetWorld(), TEXT("BP_Camera"));
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
-	PlayerController->SetViewTargetWithBlend(CoolCamera, 0.0f);*/
+	CoolCamera = FindObject<ACameraActor>(GetWorld(), TEXT("BP_Camera"));
+	if (CoolCamera != nullptr) {
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+		PlayerController->SetViewTargetWithBlend(CoolCamera, 0.0f);
+		SetActorTickEnabled(false);
+	}
 }
+#pragma optimize("", on)
 
 void ABBM_Character::MoveForward(float Value)
 {

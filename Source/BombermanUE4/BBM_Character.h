@@ -60,6 +60,8 @@ protected:
 	bool bIsDying = false;
 
 	bool bIsDead = false;
+
+	UPROPERTY()
 	ACameraActor* CoolCamera;
 
 private:
