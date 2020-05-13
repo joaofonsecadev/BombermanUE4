@@ -15,8 +15,6 @@ public:
 	// Sets default values for this actor's properties
 	ABBM_Bomb();
 
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	UPROPERTY(EditAnywhere)
 	int ExplosionRange;
 	UPROPERTY(EditAnywhere)
@@ -26,7 +24,6 @@ public:
 	FBombExploded& OnExplode() { return BombExploded; }
 
 private:
-
 	UPROPERTY(EditAnywhere)
 	float TimeToExplode;
 
@@ -35,26 +32,22 @@ private:
 
 	FBombExploded BombExploded;
 
-	UMaterialInstanceDynamic* m_DynamicMaterial;	
+	UMaterialInstanceDynamic* m_DynamicMaterial;
 
-	void ApplyColorToMesh();
+	void ApplyColorToBomb();
 
 	TArray<UStaticMeshComponent*> MyMeshes;
 
-	UPROPERTY(ReplicatedUsing = OnRep_ReplicateMesh)
 	FLinearColor m_BombColor;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void OnRep_ReplicateMesh();	
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
+	UFUNCTION(Reliable, NetMulticast)
 	void SetBombColor(FLinearColor Color);	
 };
