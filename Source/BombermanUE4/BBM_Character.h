@@ -60,7 +60,7 @@ protected:
 	void OnRep_bIsDying();
 
 	UFUNCTION()
-	void OnRep_bReplicateMesh();
+	void OnRep_ReplicateMesh();
 
 	UPROPERTY(ReplicatedUsing = OnRep_bIsDying)
 	bool bIsDying = false;
@@ -77,7 +77,7 @@ private:
 
 	UMaterialInstanceDynamic* m_DynamicMaterial;
 
-	UPROPERTY(ReplicatedUsing = OnRep_bReplicateMesh)
+	UPROPERTY(ReplicatedUsing = OnRep_ReplicateMesh)
 	FLinearColor m_PlayerColor;
 	
 	void SetColorMesh();

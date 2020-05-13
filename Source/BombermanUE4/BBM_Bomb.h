@@ -24,7 +24,6 @@ public:
 	FBombExploded& OnExplode() { return BombExploded; }
 
 private:
-
 	UPROPERTY(EditAnywhere)
 	float TimeToExplode;
 
@@ -32,6 +31,14 @@ private:
 	void Explode();
 
 	FBombExploded BombExploded;
+
+	UMaterialInstanceDynamic* m_DynamicMaterial;
+
+	void ApplyColorToBomb();
+
+	TArray<UStaticMeshComponent*> MyMeshes;
+
+	FLinearColor m_BombColor;
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,4 +48,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(Reliable, NetMulticast)
+	void SetBombColor(FLinearColor Color);	
 };
