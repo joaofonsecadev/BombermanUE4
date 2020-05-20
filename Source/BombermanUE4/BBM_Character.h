@@ -37,6 +37,9 @@ public:
 	UFUNCTION()
 	void SetColor(FLinearColor Color);
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDeath);
+	FPlayerDeath& OnPlayerDeath() { return PlayerDeath; }
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;
@@ -81,4 +84,9 @@ private:
 	FLinearColor m_PlayerColor;
 	
 	void SetColorMesh();
+
+	UFUNCTION(Server, Reliable)
+	void BroadcastEventToServer();
+
+	FPlayerDeath PlayerDeath;	
 };

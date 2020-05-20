@@ -14,6 +14,7 @@
 #include "Engine/Player.h"
 #include "BBM_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -48,13 +49,19 @@ void ABBM_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ABBM_Character, bIsDying);
-	DOREPLIFETIME(ABBM_Character, m_PlayerColor);
+	DOREPLIFETIME(ABBM_Character, m_PlayerColor);	
 }
 
 void ABBM_Character::DestroySelf_Implementation()
 {
 	DisableInput(nullptr);
 	SetPlayerAsDying();
+	BroadcastEventToServer();
+}
+
+void ABBM_Character::BroadcastEventToServer_Implementation()
+{
+	PlayerDeath.Broadcast();
 }
 
 void ABBM_Character::SetColor(FLinearColor Color)
@@ -179,7 +186,7 @@ void ABBM_Character::RestartServerLevel_Implementation()
 
 void ABBM_Character::SetPlayerAsDying_Implementation()
 {
-	bIsDying = true;
+	bIsDying = true;	
 }
 
 void ABBM_Character::OnRep_bIsDying()
@@ -193,7 +200,7 @@ void ABBM_Character::OnRep_bIsDying()
 		m_CharacterMesh->bBlendPhysics = true;
 		m_CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
 
-		bIsDead = true;
+		bIsDead = true;		
 	}
 }
 

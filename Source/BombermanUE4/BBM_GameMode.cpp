@@ -6,6 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "BBM_Character.h"
+#include "BBM_PlayerController.h"
+#include "BBM_GameOverScreen.h"
 
 ABBM_GameMode::ABBM_GameMode()
 {
@@ -51,10 +53,21 @@ void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 				case 2:
 					Character->SetColor(FLinearColor::Red);
 					break;
-				}
-			}
+				}			
+
+				Character->OnPlayerDeath().AddDynamic(this, &ABBM_GameMode::ShowGameOverScreen);
+			}			
 		}		
 	}	
+}
+
+void ABBM_GameMode::ShowGameOverScreen()
+{
+	for (int i = 0; i < m_PControllerArray.Num(); i++)
+	{
+		ABBM_PlayerController* PlayerController = Cast<ABBM_PlayerController>(m_PControllerArray[i]);
+		PlayerController->SpawnGameOverUI(GameOverScreen_BP);
+	}
 }
 
 void ABBM_GameMode::Logout(AController* Exiting)
