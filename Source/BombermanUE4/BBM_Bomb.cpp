@@ -15,6 +15,7 @@ ABBM_Bomb::ABBM_Bomb()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	SetActorEnableCollision(false);
 
 	SetReplicates(true);
 }
@@ -24,9 +25,16 @@ void ABBM_Bomb::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	FTimerHandle handle;	
+	FTimerHandle ExplodeHandler;
+	FTimerHandle TimeToExplodeHandler;
 	GetComponents<UStaticMeshComponent>(MyMeshes);
-	GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Bomb::Explode, TimeToExplode, false);
+	UWorld* World = GetWorld();
+	if (World != nullptr)
+	{
+		World->GetTimerManager().SetTimer(ExplodeHandler, this, &ABBM_Bomb::Explode, TimeToExplode, false);
+		World->GetTimerManager().SetTimer(TimeToExplodeHandler, this, &ABBM_Bomb::EnableCollisionsAfterSpawn, TimeToDetectCollisions, false);
+	}
+	
 }
 
 // Called every frame
@@ -110,4 +118,9 @@ void ABBM_Bomb::Explode_Implementation()
 
 	BombExploded.Broadcast();
 	Destroy();
+}
+
+void ABBM_Bomb::EnableCollisionsAfterSpawn_Implementation()
+{
+	SetActorEnableCollision(true);
 }

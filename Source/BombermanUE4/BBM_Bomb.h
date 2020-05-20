@@ -26,9 +26,14 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	float TimeToExplode;
+	UPROPERTY(EditAnywhere)
+	float TimeToDetectCollisions;
 
 	UFUNCTION(Server, Reliable)
 	void Explode();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void EnableCollisionsAfterSpawn();
 
 	FBombExploded BombExploded;
 
