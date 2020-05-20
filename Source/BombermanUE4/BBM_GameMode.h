@@ -4,6 +4,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "BBM_GameMode.generated.h"
 class UBBM_Grid;
+class UBBM_GameOverScreen;
 
 UCLASS()
 class BOMBERMANUE4_API ABBM_GameMode : public AGameModeBase
@@ -40,7 +41,7 @@ public:
 	float PlayerSpawnHeight = 300.0f;
 
 	UPROPERTY()
-	UBBM_Grid* GridManager;
+	UBBM_Grid* GridManager;	
 
 protected:
 	virtual void InitGame(const FString & MapName, const FString & Options, FString & ErrorMessage) override;
@@ -52,4 +53,10 @@ protected:
 private:
 	TArray<APlayerController*> m_PControllerArray;
 	TEnumAsByte<ENetMode> NetModeEnum;
+
+	UPROPERTY(EditDefaultsOnly, Category = "References")
+	TSubclassOf<UBBM_GameOverScreen> GameOverScreen_BP;
+
+	UFUNCTION()
+	void ShowGameOverScreen();
 };
