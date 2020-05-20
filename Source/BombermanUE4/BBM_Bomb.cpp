@@ -24,9 +24,16 @@ void ABBM_Bomb::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	FTimerHandle handle;	
+	FTimerHandle ExplodeHandler;
+	FTimerHandle TimeToDetectCollisionsHandler;
 	GetComponents<UStaticMeshComponent>(MyMeshes);
-	GetWorld()->GetTimerManager().SetTimer(handle, this, &ABBM_Bomb::Explode, TimeToExplode, false);
+	UWorld* World = GetWorld();
+	if (World != nullptr)
+	{
+		World->GetTimerManager().SetTimer(ExplodeHandler, this, &ABBM_Bomb::Explode, TimeToExplode, false);
+		//World->GetTimerManager().SetTimer(TimeToDetectCollisionsHandler, this, &ABBM_Bomb::EnableCollisionsAfterSpawn, TimeToDetectCollisions, false);
+	}
+	
 }
 
 // Called every frame
@@ -110,4 +117,9 @@ void ABBM_Bomb::Explode_Implementation()
 
 	BombExploded.Broadcast();
 	Destroy();
+}
+
+void ABBM_Bomb::EnableCollisionsAfterSpawn_Implementation()
+{
+	SetActorEnableCollision(true);
 }
