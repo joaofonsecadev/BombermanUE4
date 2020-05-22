@@ -10,7 +10,11 @@
 #include "Engine.h"
 #include "Engine/World.h"
 #include "Net/UnrealNetwork.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Engine/Player.h"
+#include "BBM_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ABBM_Character::ABBM_Character()
 {
@@ -37,19 +41,40 @@ ABBM_Character::ABBM_Character()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-}
 
+	SetReplicates(true);
+}
 
 void ABBM_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ABBM_Character, bIsDying);
+	DOREPLIFETIME(ABBM_Character, m_PlayerColor);	
 }
 
 void ABBM_Character::DestroySelf_Implementation()
 {
 	DisableInput(nullptr);
 	SetPlayerAsDying();
+	BroadcastEventToServer();
+}
+
+void ABBM_Character::BroadcastEventToServer_Implementation()
+{
+	PlayerDeath.Broadcast();
+}
+
+void ABBM_Character::SetColor(FLinearColor Color)
+{	
+	m_PlayerColor = Color;
+
+	SetColorMesh();
+}
+
+void ABBM_Character::SetColorMesh() 
+{	
+	m_DynamicMaterial = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+	m_DynamicMaterial->SetVectorParameterValue(TEXT("BodyColor"), m_PlayerColor);
 }
 
 void ABBM_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -139,6 +164,7 @@ void ABBM_Character::PlaceBomb_Implementation()
 				FVector SpawnPosition = FVector(TileLocation.X, TileLocation.Y, 0.0f);
 				AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Bomb, SpawnPosition, FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 				ABBM_Bomb* SpawnedBomb = Cast<ABBM_Bomb>(SpawnedActor);
+				SpawnedBomb->SetBombColor(m_PlayerColor);
 				Ammo--;
 				SpawnedBomb->OnExplode().AddDynamic(this, &ABBM_Character::IncreaseAmmo);
 			}
@@ -160,20 +186,27 @@ void ABBM_Character::RestartServerLevel_Implementation()
 
 void ABBM_Character::SetPlayerAsDying_Implementation()
 {
-	bIsDying = true;
+	bIsDying = true;	
 }
 
 void ABBM_Character::OnRep_bIsDying()
 {
 	if (!bIsDead)
 	{
-		USkeletalMeshComponent* CharacterMesh = GetMesh();
-		CharacterMesh->SetSimulatePhysics(true);
-		CharacterMesh->bBlendPhysics = true;
-		CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
 
-		bIsDead = true;
+		USkeletalMeshComponent* m_CharacterMesh = GetMesh();
+		m_CharacterMesh->SetSimulatePhysics(true);
+		m_CharacterMesh->bBlendPhysics = true;
+		m_CharacterMesh->SetCollisionProfileName(TEXT("Ragdoll"));
+
+		bIsDead = true;		
 	}
+}
+
+void ABBM_Character::OnRep_ReplicateMesh()
+{	
+	SetColorMesh();
 }
 
 void ABBM_Character::IncreaseAmmo()

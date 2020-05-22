@@ -5,6 +5,9 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "BBM_Character.h"
+#include "BBM_PlayerController.h"
+#include "BBM_GameOverScreen.h"
 
 ABBM_GameMode::ABBM_GameMode()
 {
@@ -28,15 +31,42 @@ void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	ConnectedPlayers++;
-	m_PControllerArray.Add(NewPlayer);
-	UE_LOG(LogTemp, Warning, TEXT("There are %d players now."), ConnectedPlayers);
+	m_PControllerArray.Add(NewPlayer);	
+	UE_LOG(LogTemp, Warning, TEXT("There are %d players now."), ConnectedPlayers);	
+
 	if ((ConnectedPlayers == MaxPlayerNumber))
-	{
+	{		
 		for (int8 i = 0; i < m_PControllerArray.Num(); i++)
 		{
 			FTransform SpawnPlayerAt = GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[i].X, SpawnLocations[i].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight));
 			RestartPlayerAtTransform(m_PControllerArray[i], SpawnPlayerAt);
-		}
+
+			ABBM_Character* Character = Cast<ABBM_Character>(m_PControllerArray[i]->GetCharacter());
+
+			if (Character != nullptr)
+			{
+				switch (i + 1)
+				{
+				case 1:
+					Character->SetColor(FLinearColor::Blue);
+					break;
+				case 2:
+					Character->SetColor(FLinearColor::Red);
+					break;
+				}			
+
+				Character->OnPlayerDeath().AddDynamic(this, &ABBM_GameMode::ShowGameOverScreen);
+			}			
+		}		
+	}	
+}
+
+void ABBM_GameMode::ShowGameOverScreen()
+{
+	for (int i = 0; i < m_PControllerArray.Num(); i++)
+	{
+		ABBM_PlayerController* PlayerController = Cast<ABBM_PlayerController>(m_PControllerArray[i]);
+		PlayerController->SpawnGameOverUI(GameOverScreen_BP);
 	}
 }
 

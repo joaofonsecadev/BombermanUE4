@@ -32,7 +32,13 @@ public:
 	float BaseLookUpRate;
 
 	UPROPERTY(EditAnywhere, Category = "References")
-	TSubclassOf<AActor> Bomb;
+	TSubclassOf<AActor> Bomb;		
+
+	UFUNCTION()
+	void SetColor(FLinearColor Color);
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDeath);
+	FPlayerDeath& OnPlayerDeath() { return PlayerDeath; }
 
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -56,6 +62,9 @@ protected:
 	UFUNCTION()
 	void OnRep_bIsDying();
 
+	UFUNCTION()
+	void OnRep_ReplicateMesh();
+
 	UPROPERTY(ReplicatedUsing = OnRep_bIsDying)
 	bool bIsDying = false;
 
@@ -68,4 +77,16 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	UMaterialInstanceDynamic* m_DynamicMaterial;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ReplicateMesh)
+	FLinearColor m_PlayerColor;
+	
+	void SetColorMesh();
+
+	UFUNCTION(Server, Reliable)
+	void BroadcastEventToServer();
+
+	FPlayerDeath PlayerDeath;	
 };

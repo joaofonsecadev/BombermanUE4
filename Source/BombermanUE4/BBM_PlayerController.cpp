@@ -3,10 +3,23 @@
 
 #include "BBM_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "BBM_Character.h"
+#include "GameFramework/Controller.h"
+#include "Engine/Engine.h"
+#include "UObject/NameTypes.h"
+#include "Blueprint/UserWidget.h"
+#include "BBM_GameOverScreen.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+
+void ABBM_PlayerController::BeginPlay()
+{
+
+}
 
 void ABBM_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
+
 	//InputComponent->BindAction("RestartLevel", IE_Released, this, &ABBM_PlayerController::RestartLevel);
 	InputComponent->BindAction("ExitLevel", IE_Released, this, &ABBM_PlayerController::ExitLevel);
 }
@@ -26,6 +39,17 @@ void ABBM_PlayerController::RestartServerLevel_Implementation()
 		}
 	}
 }*/
+
+void ABBM_PlayerController::SpawnGameOverUI_Implementation(TSubclassOf<UBBM_GameOverScreen> GameOverScreen_BP)
+{
+	m_GameOverScreen = CreateWidget<UBBM_GameOverScreen>(GetWorld(), GameOverScreen_BP);
+
+	if (!m_GameOverScreen) // If the widget is not created and == NULL
+	{
+		return;
+	}
+	m_GameOverScreen->AddToViewport(); // Add it to the viewport so the Construct() method in the UUserWidget:: is run.		
+}
 
 void ABBM_PlayerController::ExitLevel()
 {
