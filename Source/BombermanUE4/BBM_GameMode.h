@@ -15,8 +15,14 @@ public:
 	ABBM_GameMode();
 
 	UPROPERTY(EditDefaultsOnly)
-	int8 MaxPlayerNumber = 2;
+	int8 MaxPlayerNumber = 4;
+
+	UPROPERTY(EditDefaultsOnly)
+	int8 RequiredPlayerNumber = 2;
+
 	int8 ConnectedPlayers = 0;
+
+	bool bPlayersHaveBeenSpawned = false;
 	
 	UPROPERTY(EditAnywhere, Category="References")
 	TSubclassOf<AActor> FloorTile;
@@ -59,4 +65,6 @@ private:
 
 	UFUNCTION()
 	void ShowGameOverScreen();
+
+	void SpawnLogic(int32 CurrentIndex);
 };

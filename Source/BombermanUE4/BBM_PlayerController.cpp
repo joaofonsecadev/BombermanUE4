@@ -43,7 +43,6 @@ void ABBM_PlayerController::RestartServerLevel_Implementation()
 void ABBM_PlayerController::SpawnGameOverUI_Implementation(TSubclassOf<UBBM_GameOverScreen> GameOverScreen_BP)
 {
 	m_GameOverScreen = CreateWidget<UBBM_GameOverScreen>(GetWorld(), GameOverScreen_BP);
-
 	if (!m_GameOverScreen)
 	{
 		return;
