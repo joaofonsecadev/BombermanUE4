@@ -44,11 +44,12 @@ void ABBM_PlayerController::SpawnGameOverUI_Implementation(TSubclassOf<UBBM_Game
 {
 	m_GameOverScreen = CreateWidget<UBBM_GameOverScreen>(GetWorld(), GameOverScreen_BP);
 
-	if (!m_GameOverScreen) // If the widget is not created and == NULL
+	if (!m_GameOverScreen)
 	{
 		return;
 	}
-	m_GameOverScreen->AddToViewport(); // Add it to the viewport so the Construct() method in the UUserWidget:: is run.		
+	m_GameOverScreen->AddToViewport();
+	bShowMouseCursor = true;
 }
 
 void ABBM_PlayerController::ExitLevel()
