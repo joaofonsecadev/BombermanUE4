@@ -31,32 +31,23 @@ void ABBM_GameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	ConnectedPlayers++;
-	m_PControllerArray.Add(NewPlayer);	
+	m_PControllerArray.Add(NewPlayer);
 	UE_LOG(LogTemp, Warning, TEXT("There are %d players now."), ConnectedPlayers);	
 
-	if ((ConnectedPlayers == MaxPlayerNumber))
-	{		
-		for (int8 i = 0; i < m_PControllerArray.Num(); i++)
+	if ((ConnectedPlayers >= RequiredPlayerNumber))
+	{	
+		if (bPlayersHaveBeenSpawned)
 		{
-			FTransform SpawnPlayerAt = GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[i].X, SpawnLocations[i].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight));
-			RestartPlayerAtTransform(m_PControllerArray[i], SpawnPlayerAt);
-
-			ABBM_Character* Character = Cast<ABBM_Character>(m_PControllerArray[i]->GetCharacter());
-
-			if (Character != nullptr)
+			int32 i = m_PControllerArray.IndexOfByKey(NewPlayer);
+			SpawnLogic(i);
+		}
+		else
+		{
+			for (int8 i = 0; i < m_PControllerArray.Num(); i++)
 			{
-				switch (i + 1)
-				{
-				case 1:
-					Character->SetColor(FLinearColor::Blue);
-					break;
-				case 2:
-					Character->SetColor(FLinearColor::Red);
-					break;
-				}			
-
-				Character->OnPlayerDeath().AddDynamic(this, &ABBM_GameMode::ShowGameOverScreen);
-			}			
+				SpawnLogic(i);
+			}
+			bPlayersHaveBeenSpawned = true;
 		}		
 	}	
 }
@@ -65,8 +56,44 @@ void ABBM_GameMode::ShowGameOverScreen()
 {
 	for (int i = 0; i < m_PControllerArray.Num(); i++)
 	{
-		ABBM_PlayerController* PlayerController = Cast<ABBM_PlayerController>(m_PControllerArray[i]);
-		PlayerController->SpawnGameOverUI(GameOverScreen_BP);
+		ABBM_Character* PCPawn = Cast<ABBM_Character>(m_PControllerArray[i]->GetPawn());
+		if (PCPawn != nullptr)
+		{
+			if ((PCPawn->bIsDead == true) || (PCPawn->bIsDying == true))
+			{
+				ABBM_PlayerController* PlayerController = Cast<ABBM_PlayerController>(m_PControllerArray[i]);
+				PlayerController->SpawnGameOverUI(GameOverScreen_BP);
+			}
+		}
+	}
+}
+
+void ABBM_GameMode::SpawnLogic(int32 CurrentIndex)
+{
+	FTransform SpawnPlayerAt = GridManager->GetTransformFromGridReferenceCoordiantes(SpawnLocations[CurrentIndex].X, SpawnLocations[CurrentIndex].Y) + FTransform(FVector(0, 0, PlayerSpawnHeight));
+	RestartPlayerAtTransform(m_PControllerArray[CurrentIndex], SpawnPlayerAt);
+
+	ABBM_Character* Character = Cast<ABBM_Character>(m_PControllerArray[CurrentIndex]->GetCharacter());
+
+	if (Character != nullptr)
+	{
+		switch (CurrentIndex + 1)
+		{
+		case 1:
+			Character->SetColor(FLinearColor::Blue);
+			break;
+		case 2:
+			Character->SetColor(FLinearColor::Red);
+			break;
+		case 3:
+			Character->SetColor(FLinearColor::Green);
+			break;
+		case 4:
+			Character->SetColor(FLinearColor::Yellow);
+			break;
+		}
+
+		Character->OnPlayerDeath().AddDynamic(this, &ABBM_GameMode::ShowGameOverScreen);
 	}
 }
 

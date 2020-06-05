@@ -11,8 +11,6 @@ UBBM_GameOverScreen::UBBM_GameOverScreen(const FObjectInitializer& ObjectInitial
 
 }
 
-#pragma optimize ("", off)
-
 bool UBBM_GameOverScreen::Initialize()
 {
 	if (Super::Initialize())
@@ -30,5 +28,3 @@ void UBBM_GameOverScreen::ReturnToMainMenu()
 {
 	UGameplayStatics::OpenLevel(GetWorld(), m_MapMainMenuName);
 }
-
-#pragma optimize ("", on)

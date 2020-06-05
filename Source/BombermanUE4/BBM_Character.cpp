@@ -193,8 +193,6 @@ void ABBM_Character::OnRep_bIsDying()
 {
 	if (!bIsDead)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Gonna become a ragdoll"));
-
 		USkeletalMeshComponent* m_CharacterMesh = GetMesh();
 		m_CharacterMesh->SetSimulatePhysics(true);
 		m_CharacterMesh->bBlendPhysics = true;

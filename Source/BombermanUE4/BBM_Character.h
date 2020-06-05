@@ -40,6 +40,11 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDeath);
 	FPlayerDeath& OnPlayerDeath() { return PlayerDeath; }
 
+	bool bIsDead = false;
+
+	UPROPERTY(ReplicatedUsing = OnRep_bIsDying)
+	bool bIsDying = false;
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;
@@ -65,10 +70,6 @@ protected:
 	UFUNCTION()
 	void OnRep_ReplicateMesh();
 
-	UPROPERTY(ReplicatedUsing = OnRep_bIsDying)
-	bool bIsDying = false;
-
-	bool bIsDead = false;
 	ACameraActor* CoolCamera;
 
 private:
